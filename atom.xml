@@ -437,7 +437,7 @@
     <link href="http://yoursite.com/2015/02/04/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%85%AD%E5%A4%A7%E5%8E%9F%E5%88%99-%E9%87%8C%E6%B0%8F%E6%9B%BF%E6%8D%A2%E5%8E%9F%E5%88%99/"/>
     <id>http://yoursite.com/2015/02/04/设计模式六大原则-里氏替换原则/</id>
     <published>2015-02-04T14:34:39.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<p>我们都知道面向对象有三大特性：封装、继承、多态。所以我们在实际开发过程中，子类在继承父类后，根据多态的特性，可能是图一时方便，经常任意重写父类的方法，那么这种方式会大大增加代码出问题的几率。比如下面场景：类C实现了某项功能F1。现在需要对功能F1作修改扩展，将功能F1扩展为F，其中F由原有的功能F1和新功能F2组成。新功能F由类C的子类C1来完成，则子类C1在完成功能F的同时，有可能会导致类C的原功能F1发生故障。这时候里氏替换原则就闪亮登场了。</p>
 <a id="more"></a>
@@ -625,7 +625,7 @@
     <link href="http://yoursite.com/2015/01/27/Java%E4%B8%AD%E7%9A%84Listener-%E7%9B%91%E5%90%AC%E5%99%A8/"/>
     <id>http://yoursite.com/2015/01/27/Java中的Listener-监听器/</id>
     <published>2015-01-27T07:36:14.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文介绍了Listener以下几个方面的内容：</p>
 <ul>
@@ -1063,7 +1063,7 @@
     <link href="http://yoursite.com/2013/07/18/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC7%E5%A4%A9%E2%80%94%E9%AB%98%E5%B0%94%E5%AF%BA%E5%B1%B1%EF%BC%8C%E5%BE%85%E7%BB%AD/"/>
     <id>http://yoursite.com/2013/07/18/骑车去西藏—第7天—高尔寺山，待续/</id>
     <published>2013-07-18T14:18:46.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a>
 <p>未完待续。。。</p>
@@ -1095,7 +1095,7 @@
     <link href="http://yoursite.com/2013/07/17/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC6%E5%A4%A9%E2%80%94%E6%8A%98%E5%A4%9A%E5%B1%B1%EF%BC%8C%E6%8A%98%E7%A3%A8%E4%BA%BA%E5%A4%9A%E7%9A%84%E5%B1%B1/"/>
     <id>http://yoursite.com/2013/07/17/骑车去西藏—第6天—折多山，折磨人多的山/</id>
     <published>2013-07-17T10:07:54.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a>
 <p>原文链接：</p>
@@ -1223,7 +1223,7 @@
     <link href="http://yoursite.com/2013/07/16/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC5%E5%A4%A9%E2%80%94%E8%B7%91%E9%A9%AC%E6%BA%9C%E6%BA%9C%E7%9A%84%E5%B1%B1%E4%B8%8A%EF%BC%8C%E6%83%85%E6%AD%8C%E4%B9%8B%E5%9F%8E%EF%BC%8C%E5%BA%B7%E5%AE%9A/"/>
     <id>http://yoursite.com/2013/07/16/骑车去西藏—第5天—跑马溜溜的山上，情歌之城，康定/</id>
     <published>2013-07-16T10:07:43.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a>
 <p>原文链接：</p>
@@ -1287,7 +1287,7 @@
     <link href="http://yoursite.com/2013/07/15/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC4%E5%A4%A9%E2%80%94%E6%B3%B8%E5%AE%9A-%E5%BA%B7%E5%AE%9A%EF%BC%8C%E5%9D%9A%E5%AE%9A%E7%9A%84%E4%BF%A1%E5%BF%83/"/>
     <id>http://yoursite.com/2013/07/15/骑车去西藏—第4天—泸定-康定，坚定的信心/</id>
     <published>2013-07-15T10:07:38.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a>
 <p>原文链接：</p>
@@ -1429,7 +1429,7 @@
     <link href="http://yoursite.com/2013/07/14/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC3%E5%A4%A9%E2%80%94%E7%88%AC%E4%B8%8A%E4%BA%86%E4%BA%8C%E9%83%8E%E5%B1%B1%EF%BC%8C%E6%88%91%E5%B0%B1%E6%98%AF%E4%BA%8C%E9%83%8E%E7%A5%9E/"/>
     <id>http://yoursite.com/2013/07/14/骑车去西藏—第3天—爬上了二郎山，我就是二郎神/</id>
     <published>2013-07-14T10:07:34.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
+    <updated>2016-12-06T02:32:42.000Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a>
 <p>原文链接：</p>
