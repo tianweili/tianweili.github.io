@@ -1,0 +1,858 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="依赖倒置原则, java, 设计模式, 六大原则" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="李天炜" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="类A直接依赖于类B，假如要将类A修改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑。类B和C是底层模块，负责基本的原子操作。假如修改类A，将会给程序带来不必要的风险。而遵循依赖倒置原则的程序设计可以解决这一问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式六大原则 - 依赖倒置原则">
+<meta property="og:url" content="http://yoursite.com/2015/02/07/设计模式六大原则-依赖倒置原则/index.html">
+<meta property="og:site_name" content="李天炜">
+<meta property="og:description" content="类A直接依赖于类B，假如要将类A修改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑。类B和C是底层模块，负责基本的原子操作。假如修改类A，将会给程序带来不必要的风险。而遵循依赖倒置原则的程序设计可以解决这一问题。">
+<meta property="og:updated_time" content="2016-12-06T02:05:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式六大原则 - 依赖倒置原则">
+<meta name="twitter:description" content="类A直接依赖于类B，假如要将类A修改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑。类B和C是底层模块，负责基本的原子操作。假如修改类A，将会给程序带来不必要的风险。而遵循依赖倒置原则的程序设计可以解决这一问题。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/02/07/设计模式六大原则-依赖倒置原则/"/>
+
+
+
+
+
+  <title> 设计模式六大原则 - 依赖倒置原则 | 李天炜 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">李天炜</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/02/07/设计模式六大原则-依赖倒置原则/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="李天炜">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/image/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="李天炜">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="李天炜" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式六大原则 - 依赖倒置原则
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-02-07T22:45:14+08:00">
+                2015-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/02/07/设计模式六大原则-依赖倒置原则/" class="leancloud_visitors" data-flag-title="设计模式六大原则 - 依赖倒置原则">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>类A直接依赖于类B，假如要将类A修改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑。类B和C是底层模块，负责基本的原子操作。假如修改类A，将会给程序带来不必要的风险。而遵循依赖倒置原则的程序设计可以解决这一问题。</p>
+<a id="more"></a>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/02/07/dependence-inversion-principle/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/02/07/dependence-inversion-principle/</a></p>
+<h2 id="什么是依赖倒置原则"><a href="#什么是依赖倒置原则" class="headerlink" title="什么是依赖倒置原则"></a>什么是依赖倒置原则</h2><p>英文缩写DIP（Dependence Inversion Principle）。</p>
+<p>原始定义：</p>
+<blockquote>
+<p>High level modules should not depend upon low level modules. Both should depend upon abstractions. Abstractions should not depend upon details. Details should depend upon abstractions.</p>
+</blockquote>
+<p>翻译过来就三层含义：</p>
+<ul>
+<li>高层模块不应该依赖低层模块，两者都应该依赖其抽象；</li>
+<li>抽象不应该依赖细节；</li>
+<li>细节应该依赖抽象。</li>
+</ul>
+<p>抽象：即抽象类或接口，两者是不能够实例化的。</p>
+<p>细节：即具体的实现类，实现接口或者继承抽象类所产生的类，两者可以通过关键字new直接被实例化。</p>
+<p>现在我们来通过实例还原开篇问题的场景，以便更好的来理解。下面代码描述了一个简单的场景，Jim作为人有吃的方法，苹果有取得自己名字的方法，然后实现Jim去吃苹果。</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//具体Jim人类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Jim</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">(Apple apple)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"Jim eat "</span> + apple.getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//具体苹果类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Apple</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"apple"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Jim jim = <span class="keyword">new</span> Jim();</div><div class="line">        Apple apple = <span class="keyword">new</span> Apple();</div><div class="line">        jim.eat(apple);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：Jim eat apple</p>
+<p>上面代码看起来比较简单，但其实是一个非常脆弱的设计。现在Jim可以吃苹果了，但是不能只吃苹果而不吃别的水果啊，这样下去肯定会造成营养失衡。现在想让Jim吃香蕉了（好像香蕉里含钾元素比较多，吃点比较有益），突然发现Jim是吃不了香蕉的，那怎么办呢？看来只有修改代码了啊，由于上面代码中Jim类依赖于Apple类，所以导致不得不去改动Jim类里面的代码。那如果下次Jim又要吃别的水果了呢？继续修改代码？这种处理方式显然是不可取的，频繁修改会带来很大的系统风险，改着改着可能就发现Jim不会吃水果了。</p>
+<p>上面的代码之所以会出现上述难堪的问题，就是因为Jim类依赖于Apple类，两者是紧耦合的关系，其导致的结果就是系统的可维护性大大降低。要增加香蕉类却要去修改Jim类代码，这是不可忍受的，你改你的代码为什么要动我的啊，显然Jim不乐意了。我们常说要设计一个健壮稳定的系统，而这里只是增加了一个香蕉类，就要去修改Jim类，健壮和稳定还从何谈起。</p>
+<p>而根据依赖倒置原则，我们可以对上述代码做些修改，提取抽象的部分。首先我们提取出两个接口：People和Fruit，都提供各自必需的抽象方法，这样以后无论是增加Jim人类，还是增加Apple、Banana等各种水果，都只需要增加自己的实现类就可以了。由于遵循依赖倒置原则，只依赖于抽象，而不依赖于细节，所以增加类无需修改其他类。</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//人接口</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">People</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">(Fruit fruit)</span></span>;<span class="comment">//人都有吃的方法，不然都饿死了</span></div><div class="line">&#125;</div><div class="line"><span class="comment">//水果接口</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Fruit</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>;<span class="comment">//水果都是有名字的</span></div><div class="line">&#125;</div><div class="line"><span class="comment">//具体Jim人类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Jim</span> <span class="keyword">implements</span> <span class="title">People</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">(Fruit fruit)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"Jim eat "</span> + fruit.getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//具体苹果类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">implements</span> <span class="title">Fruit</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"apple"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//具体香蕉类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Banana</span> <span class="keyword">implements</span> <span class="title">Fruit</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"banana"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        People jim = <span class="keyword">new</span> Jim();</div><div class="line">        Fruit apple = <span class="keyword">new</span> Apple();</div><div class="line">        Fruit Banana = <span class="keyword">new</span> Banana();<span class="comment">//这里符合了里氏替换原则</span></div><div class="line">        jim.eat(apple);</div><div class="line">        jim.eat(Banana);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Jim eat apple</div><div class="line">Jim eat banana</div></pre></td></tr></table></figure></p>
+<ul>
+<li>People类是复杂的业务逻辑，属于高层模块，而Fruit是原子模块，属于低层模块。People依赖于抽象的Fruit接口，这就做到了：高层模块不应该依赖低层模块，两者都应该依赖于抽象（抽象类或接口）。</li>
+<li>People和Fruit接口与各自的实现类没有关系，增加实现类不会影响接口，这就做到了：抽象（抽象类或接口）不应该依赖于细节（具体实现类）。</li>
+<li>Jim、Apple、Banana实现类都要去实现各自的接口所定义的抽象方法，所以是依赖于接口的。这就做到了：细节（具体实现类）应该依赖抽象。</li>
+</ul>
+<h2 id="什么是倒置"><a href="#什么是倒置" class="headerlink" title="什么是倒置"></a>什么是倒置</h2><p>到了这里，我们对依赖倒置原则的“依赖”就很好理解了，但是什么是“倒置”呢。是这样子的，刚开始按照正常人的一般思维方式，我想吃香蕉就是吃香蕉，想吃苹果就吃苹果，编程也是这样，都是按照面向实现的思维方式来设计。而现在要倒置思维，提取公共的抽象，面向接口（抽象类）编程。不再依赖于具体实现了，而是依赖于接口或抽象类，这就是依赖的思维方式“倒置”了。</p>
+<h2 id="依赖的三种实现方式"><a href="#依赖的三种实现方式" class="headerlink" title="依赖的三种实现方式"></a>依赖的三种实现方式</h2><p>对象的依赖关系有三种方式来传递：</p>
+<h3 id="接口方法中声明依赖对象。"><a href="#接口方法中声明依赖对象。" class="headerlink" title="接口方法中声明依赖对象。"></a>接口方法中声明依赖对象。</h3><p>就是我们上面代码所展示的那样。</p>
+<h3 id="构造方法传递依赖对象。"><a href="#构造方法传递依赖对象。" class="headerlink" title="构造方法传递依赖对象。"></a>构造方法传递依赖对象。</h3><p>在构造函数中的需要传递的参数是抽象类或接口的方式实现。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//具体Jim人类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Jim</span> <span class="keyword">implements</span> <span class="title">People</span></span>&#123;</div><div class="line">     </div><div class="line">    <span class="keyword">private</span> Fruit fruit;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Jim</span><span class="params">(Fruit fruit)</span></span>&#123;<span class="comment">//构造方法传递依赖对象</span></div><div class="line">        <span class="keyword">this</span>.fruit = fruit;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">(Fruit fruit)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"Jim eat "</span> + <span class="keyword">this</span>.fruit.getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Setter方法传递依赖对象。"><a href="#Setter方法传递依赖对象。" class="headerlink" title="Setter方法传递依赖对象。"></a>Setter方法传递依赖对象。</h3><p>在我们设置的setXXX方法中的参数为抽象类或接口，来实现传递依赖对象。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//具体Jim人类</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Jim</span> <span class="keyword">implements</span> <span class="title">People</span></span>&#123;</div><div class="line">     </div><div class="line">    <span class="keyword">private</span> Fruit fruit;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFruit</span><span class="params">(Fruit fruit)</span></span>&#123;<span class="comment">//setter方式传递依赖对象</span></div><div class="line">        <span class="keyword">this</span>.fruit = fruit;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"Jim eat "</span> + <span class="keyword">this</span>.fruit.getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>从上面的代码修改过程中，我们可以看到由于类之间松耦合的设计，面向接口编程依赖抽象而不依赖细节，所以在修改某个类的代码时，不会牵涉到其他类的修改，显著降低系统风险，提高系统健壮性。</p>
+<p>还有一个优点是，在我们实际项目开发中，都是多人团队协作，每人负责某一模块。比如一个人负责开发People模块，一人负责开发Fruit模块，如果未采用依赖倒置原则，没有提取抽象，那么开发People模块的人必须等Fruit模块开发完成后自己才能开发，否则编译都无法通过，这就是单线程的开发。为了能够两人并行开发，设计时遵循依赖倒置原则，提取抽象，就可以大大提高开发进度。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>说到底，依赖倒置原则的核心就是面向接口编程的思想，尽量对每个实现类都提取抽象和公共接口形成接口或抽象类，依赖于抽象而不要依赖于具体实现。依赖倒置原则的本质其实就是通过抽象（抽象类或接口）使各个类或模块的实现彼此独立，不相互影响，实现模块间的松耦合。但是这个原则也是6个设计原则中最难以实现的了，如果没有实现这个原则，那么也就意味着开闭原则（对扩展开放，对修改关闭）也无法实现。</p>
+<hr>
+<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/02/07/dependence-inversion-principle/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/02/07/dependence-inversion-principle/</a></p>
+<p>转载请注明作者及出处，谢谢。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/04/设计模式六大原则-里氏替换原则/" rel="next" title="设计模式六大原则 - 里氏替换原则">
+                <i class="fa fa-chevron-left"></i> 设计模式六大原则 - 里氏替换原则
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/10/设计模式六大原则-接口隔离原则/" rel="prev" title="设计模式六大原则 - 接口隔离原则">
+                设计模式六大原则 - 接口隔离原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/image/avatar.png"
+               alt="李天炜" />
+          <p class="site-author-name" itemprop="name">李天炜</p>
+          <p class="site-description motion-element" itemprop="description">不做半瓶水晃荡的人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tianweili/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是依赖倒置原则"><span class="nav-number">1.</span> <span class="nav-text">什么是依赖倒置原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是倒置"><span class="nav-number">2.</span> <span class="nav-text">什么是倒置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖的三种实现方式"><span class="nav-number">3.</span> <span class="nav-text">依赖的三种实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#接口方法中声明依赖对象。"><span class="nav-number">3.1.</span> <span class="nav-text">接口方法中声明依赖对象。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法传递依赖对象。"><span class="nav-number">3.2.</span> <span class="nav-text">构造方法传递依赖对象。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Setter方法传递依赖对象。"><span class="nav-number">3.3.</span> <span class="nav-text">Setter方法传递依赖对象。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李天炜</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("mgBCsnNGzmptjmsdJSPa56Pq-gzGzoHsz", "M83ciajGFb7RCDVkEn3VflT6");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

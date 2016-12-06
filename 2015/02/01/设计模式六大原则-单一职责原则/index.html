@@ -1,0 +1,832 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java, 设计模式, 六大原则, 单一职责原则" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="李天炜" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式六大原则 - 单一职责原则">
+<meta property="og:url" content="http://yoursite.com/2015/02/01/设计模式六大原则-单一职责原则/index.html">
+<meta property="og:site_name" content="李天炜">
+<meta property="og:description" content="初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的">
+<meta property="og:updated_time" content="2016-12-06T02:05:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式六大原则 - 单一职责原则">
+<meta name="twitter:description" content="初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/02/01/设计模式六大原则-单一职责原则/"/>
+
+
+
+
+
+  <title> 设计模式六大原则 - 单一职责原则 | 李天炜 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">李天炜</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/02/01/设计模式六大原则-单一职责原则/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="李天炜">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/image/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="李天炜">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="李天炜" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式六大原则 - 单一职责原则
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-02-01T17:56:35+08:00">
+                2015-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/02/01/设计模式六大原则-单一职责原则/" class="leancloud_visitors" data-flag-title="设计模式六大原则 - 单一职责原则">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的单一职责原则。</p>
+<a id="more"></a>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/</a></p>
+<h2 id="什么是单一职责原则？"><a href="#什么是单一职责原则？" class="headerlink" title="什么是单一职责原则？"></a>什么是单一职责原则？</h2><p>单一职责原则的英文名称是Single Responsibility Principle，简称是SRP。SRP原则的解释是：There should never be more than one reason for a class to change。定义很简单，即不能存在多于一个导致类变更的原因。简单的说就是一个类只负责一项职责。</p>
+<p>在软件设计中，秉承着“高内聚，低耦合”的思想，让一个类仅负责一项职责，如果一个类有多于一项的职责，那么就代表这个类耦合性变高了，这些职责耦合在了一起，这是比较脆弱的设计。因为一旦某一项职责发生了改变，需要去更改代码，那么有可能会引起其他职责改变。所谓牵一发而动全身，这显然是我们所不愿意看到的，所以我们会把这个类分拆开来，由两个类来分别维护这两个职责，这样当一个职责发生改变，需要修改时，不会影响到另一个职责。</p>
+<p>需要说明的是单一职责原则不只是面向对象编程思想所特有的，只要是模块化的程序设计，都适用单一职责原则。</p>
+<h2 id="关于职责"><a href="#关于职责" class="headerlink" title="关于职责"></a>关于职责</h2><p>看到上面所述，或许有人会说这么简单谁不知道。的确，很多程序员即使没有学过设计模式，不知道单一职责原则，在编程的时候，在设计软件时也会有意识的遵循这一原则。因为谁都不希望修改一个地方会引发另外一个地方出现问题，而避免这种问题的最好处理方式就是设计时遵循单一职责原则。但是，我认为单一职责原则的难点是在于职责范围的认定。关于职责的认定是一个仁者见仁智者见智的话题，在实际开发中也会引起程序员之间的争论。有的人认为这些功能方法的实现目的很相似，必须要放在一个类中，有的人认为方法差别很大，必须要分拆成多个类，在多个类里面来实现。</p>
+<p>还有职责的扩散问题。软件一开发完上线后并不是一成不变的，随着社会的进步，需求的变更，软件的功能可能要做些维护更改，有时候会遇到职责扩散。所谓的职责扩散就是因为某种原因，职责R被分化为粒度更细的R1和R2。</p>
+<p>比如类C只负责一个职责R，这是符合单一职责原则的。但是后来需要把职责R拆分为职责R1和职责R2，那么这时候是否需要死守着单一职责原则，把类C也拆开为C1和C2。接着如果R1又需要细化为R11和R12呢……</p>
+<p>我们必须要意识到，一味的遵守单一职责原则，不停的分拆类所付出的开销是很大的。这时候就涉及到平衡的问题，平衡单一职责原则与修改造成的开销。我的观点是如果一个方法逻辑不复杂的情况下，可以修改方法实现，否则要拆分为两个方法，遵循方法级别的单一职责原则；如果一个类方法不多的情况下，可以只增加方法，而不用分拆为多个类，否则要拆分为多个类，遵循类级别的单一职责原则。</p>
+<h2 id="遵循单一职责原则的优点"><a href="#遵循单一职责原则的优点" class="headerlink" title="遵循单一职责原则的优点"></a>遵循单一职责原则的优点</h2><ul>
+<li>降低了类的复杂度。一个类只负责一项职责比负责多项职责要简单得多。</li>
+<li>提高了代码的可读性。一个类简单了，可读性自然就提高了。</li>
+<li>提高了系统的可维护性。代码的可读性高了，并且修改一项职责对其他职责影响降低了，可维护性自然就提高了。</li>
+<li>变更引起的风险变低了。单一职责最大的优点就是修改一个功能，对其他功能的影响显著降低。</li>
+</ul>
+<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/</a></p>
+<p>转载请注明作者及出处，谢谢。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/29/使用JXL组件操作Excel和导出文件/" rel="next" title="使用JXL组件操作Excel和导出文件">
+                <i class="fa fa-chevron-left"></i> 使用JXL组件操作Excel和导出文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/04/设计模式六大原则-里氏替换原则/" rel="prev" title="设计模式六大原则 - 里氏替换原则">
+                设计模式六大原则 - 里氏替换原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/image/avatar.png"
+               alt="李天炜" />
+          <p class="site-author-name" itemprop="name">李天炜</p>
+          <p class="site-description motion-element" itemprop="description">不做半瓶水晃荡的人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tianweili/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是单一职责原则？"><span class="nav-number">1.</span> <span class="nav-text">什么是单一职责原则？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于职责"><span class="nav-number">2.</span> <span class="nav-text">关于职责</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遵循单一职责原则的优点"><span class="nav-number">3.</span> <span class="nav-text">遵循单一职责原则的优点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李天炜</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("mgBCsnNGzmptjmsdJSPa56Pq-gzGzoHsz", "M83ciajGFb7RCDVkEn3VflT6");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

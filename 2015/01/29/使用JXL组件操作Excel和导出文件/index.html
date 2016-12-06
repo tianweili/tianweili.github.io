@@ -1,0 +1,923 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jxl, excel, java" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="李天炜" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这段时间参与的项目要求做几张Excel报表，由于项目框架使用了jxl组件，所以把jxl组件的详细用法归纳总结一下。本文主要讲述了以下内容：
+
+JXL及相关工具简介
+如何安装JXL
+JXL的基本操作
+创建文件
+单元格操作
+合并单元格
+行高和列宽
+
+
+数据格式化
+字符串格式化
+对齐方式
+
+
+读取文件
+修改文件
+
+
+导出文件实例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用JXL组件操作Excel和导出文件">
+<meta property="og:url" content="http://yoursite.com/2015/01/29/使用JXL组件操作Excel和导出文件/index.html">
+<meta property="og:site_name" content="李天炜">
+<meta property="og:description" content="这段时间参与的项目要求做几张Excel报表，由于项目框架使用了jxl组件，所以把jxl组件的详细用法归纳总结一下。本文主要讲述了以下内容：
+
+JXL及相关工具简介
+如何安装JXL
+JXL的基本操作
+创建文件
+单元格操作
+合并单元格
+行高和列宽
+
+
+数据格式化
+字符串格式化
+对齐方式
+
+
+读取文件
+修改文件
+
+
+导出文件实例">
+<meta property="og:updated_time" content="2016-12-06T02:05:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用JXL组件操作Excel和导出文件">
+<meta name="twitter:description" content="这段时间参与的项目要求做几张Excel报表，由于项目框架使用了jxl组件，所以把jxl组件的详细用法归纳总结一下。本文主要讲述了以下内容：
+
+JXL及相关工具简介
+如何安装JXL
+JXL的基本操作
+创建文件
+单元格操作
+合并单元格
+行高和列宽
+
+
+数据格式化
+字符串格式化
+对齐方式
+
+
+读取文件
+修改文件
+
+
+导出文件实例">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/01/29/使用JXL组件操作Excel和导出文件/"/>
+
+
+
+
+
+  <title> 使用JXL组件操作Excel和导出文件 | 李天炜 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">李天炜</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/29/使用JXL组件操作Excel和导出文件/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="李天炜">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/image/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="李天炜">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="李天炜" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用JXL组件操作Excel和导出文件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-29T16:29:57+08:00">
+                2015-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/01/29/使用JXL组件操作Excel和导出文件/" class="leancloud_visitors" data-flag-title="使用JXL组件操作Excel和导出文件">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这段时间参与的项目要求做几张Excel报表，由于项目框架使用了jxl组件，所以把jxl组件的详细用法归纳总结一下。本文主要讲述了以下内容：</p>
+<ul>
+<li>JXL及相关工具简介</li>
+<li>如何安装JXL</li>
+<li>JXL的基本操作<ul>
+<li>创建文件</li>
+<li>单元格操作<ul>
+<li>合并单元格</li>
+<li>行高和列宽</li>
+</ul>
+</li>
+<li>数据格式化<ul>
+<li>字符串格式化</li>
+<li>对齐方式</li>
+</ul>
+</li>
+<li>读取文件</li>
+<li>修改文件</li>
+</ul>
+</li>
+<li>导出文件实例</li>
+</ul>
+<a id="more"></a>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/01/29/use-jxl-produce-excel/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/01/29/use-jxl-produce-excel/</a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>jxl是一个韩国人写的java操作excel的工具, 在开源世界中，有两套比较有影响的API可供使用，一个是POI，一个是jExcelAPI。其中jExcelAPI功能相对POI比较弱一点。但jExcelAPI对中文支持非常好，API是纯Java的，并不依赖Windows系统，即使运行在Linux下，它同样能够正确的处理Excel文件。另外需要说明的是，这套API对图形和图表的支持很有限，而且仅仅识别PNG格式。</p>
+<h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><p>网上下载jxl.jar包，然后导入工程项目lib中，即可使用。</p>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="创建文件"><a href="#创建文件" class="headerlink" title="创建文件"></a>创建文件</h3><p>以下实例是生成一个名为“test.xls”的Excel文件，其中第一个工作表被命名为“第一页”。编译执行后，会产生一个Excel文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成Excel的类 </span></div><div class="line"><span class="keyword">import</span> java.io.File;</div><div class="line"></div><div class="line"><span class="keyword">import</span> jxl.Workbook;</div><div class="line"><span class="keyword">import</span> jxl.write.Label;</div><div class="line"><span class="keyword">import</span> jxl.write.WritableSheet;</div><div class="line"><span class="keyword">import</span> jxl.write.WritableWorkbook;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CreateExcel</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">// 打开文件</span></div><div class="line">            WritableWorkbook book = Workbook.createWorkbook(<span class="keyword">new</span> File(<span class="string">"c:/test.xls"</span>));</div><div class="line">            <span class="comment">// 生成名为“第一页”的工作表，参数0表示这是第一页</span></div><div class="line">            WritableSheet sheet = book.createSheet(<span class="string">" 第一页 "</span>, <span class="number">0</span>);</div><div class="line">            <span class="comment">// 在Label对象的构造子中指名单元格位置是第一列第一行(0,0)</span></div><div class="line">            <span class="comment">// 以及单元格内容为test</span></div><div class="line">            Label label = <span class="keyword">new</span> Label(<span class="number">0</span>, <span class="number">0</span>, <span class="string">" test "</span>);</div><div class="line">            <span class="comment">// 将定义好的单元格添加到工作表中</span></div><div class="line">            sheet.addCell(label);</div><div class="line"></div><div class="line">            <span class="comment">// 生成一个保存数字的单元格，必须使用Number的完整包路径，否则有语法歧义。</span></div><div class="line">            <span class="comment">//单元格位置是第二列，第一行，值为123.456</span></div><div class="line">            jxl.write.Number number = <span class="keyword">new</span> jxl.write.Number(<span class="number">1</span>, <span class="number">0</span>, <span class="number">123.456</span>);</div><div class="line">            sheet.addCell(number);</div><div class="line"></div><div class="line">            <span class="comment">// 写入数据并关闭文件</span></div><div class="line">            book.write();</div><div class="line">            book.close();</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            System.out.println(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="单元格操作"><a href="#单元格操作" class="headerlink" title="单元格操作"></a>单元格操作</h3><p>Excel中很重要的一部分是对单元格的操作，比如行高、列宽、单元格合并等，所幸jExcelAPI提供了这些支持。这些操作相对比较简单，下面只介绍一下相关的API。</p>
+<h4 id="合并单元格"><a href="#合并单元格" class="headerlink" title="合并单元格"></a>合并单元格</h4><p>合并既可以是横向的，也可以是纵向的。合并后的单元格不能再次进行合并，否则会触发异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 方法作用是从(m,n)到(p,q)的单元格全部合并</span></div><div class="line">WritableSheet.mergeCells( <span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span> p, <span class="keyword">int</span> q);</div><div class="line"></div><div class="line"><span class="comment">// 合并第1列第1行到第3列第4行的所有单元格</span></div><div class="line">sheet.mergeCells(<span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>);</div><div class="line"></div><div class="line"><span class="comment">// 先合并单元格，再添加内容。并且定义的列行方位在合并的单元格第一个列行方位，否则添加不上内容，如下所示：</span></div><div class="line">Label label = <span class="keyword">new</span> Label(<span class="number">0</span>, <span class="number">0</span>, <span class="string">" 测试 "</span>);</div><div class="line">sheet.addCell(label);</div></pre></td></tr></table></figure>
+<h4 id="行高和列宽"><a href="#行高和列宽" class="headerlink" title="行高和列宽"></a>行高和列宽</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 作用是指定第i+1行的高度</span></div><div class="line">WritableSheet.setRowView( <span class="keyword">int</span> i, <span class="keyword">int</span> height);</div><div class="line"></div><div class="line"><span class="comment">// 将第一行的高度设为200</span></div><div class="line">sheet.setRowView(<span class="number">0</span>, <span class="number">200</span>);</div><div class="line"></div><div class="line"><span class="comment">// 作用是指定第i+1列的宽度</span></div><div class="line">WritableSheet.setColumnView( <span class="keyword">int</span> i, <span class="keyword">int</span> width);</div><div class="line"></div><div class="line"><span class="comment">// 将第一列的宽度设为30</span></div><div class="line">sheet.setColumnView(<span class="number">0</span>, <span class="number">30</span>);</div></pre></td></tr></table></figure>
+<h3 id="数据格式化"><a href="#数据格式化" class="headerlink" title="数据格式化"></a>数据格式化</h3><h4 id="字串格式化"><a href="#字串格式化" class="headerlink" title="字串格式化"></a>字串格式化</h4><p>字符串的格式化涉及到的是字体、粗细、字号等元素，这些功能主要由WritableFont和WritableCellFormat类来负责。</p>
+<p>WritableFont有非常丰富的构造子方法，供不同情况下使用，jExcelAPI的java-doc中有详细列表，这里不再列出。</p>
+<p>WritableCellFormat类非常重要，通过它可以指定单元格的各种属性，后面的单元格格式化中会有更多描述。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//字体样式：宋体；11号；粗体</span></div><div class="line">WritableFont font1 = <span class="keyword">new</span> WritableFont(WritableFont.createFont(<span class="string">"宋体"</span>), <span class="number">11</span>, WritableFont.BOLD);</div><div class="line">WritableCellFormat format1 = <span class="keyword">new</span>  WritableCellFormat(font1);</div><div class="line">Label label = <span class="keyword">new</span>  Label( <span class="number">0</span> , <span class="number">0</span> , <span class="string">"test"</span>, format1);</div></pre></td></tr></table></figure>
+<h4 id="对齐方式"><a href="#对齐方式" class="headerlink" title="对齐方式"></a>对齐方式</h4><p>在WritableCellFormat类中，还有一个很重要的方法是指定数据的对齐方式，比如针对我们上面的实例，可以指定：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 把水平对齐方式指定为居中 </span></div><div class="line">format1.setAlignment(jxl.format.Alignment.CENTRE);</div><div class="line"><span class="comment">// 把垂直对齐方式指定为居中 </span></div><div class="line">format1.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);</div></pre></td></tr></table></figure>
+<h3 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 读取Excel的类 </span></div><div class="line"><span class="keyword">import</span> java.io.File;</div><div class="line"></div><div class="line"><span class="keyword">import</span> jxl.Cell;</div><div class="line"><span class="keyword">import</span> jxl.Sheet;</div><div class="line"><span class="keyword">import</span> jxl.Workbook;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadExcel</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Workbook book = Workbook.getWorkbook(<span class="keyword">new</span> File(<span class="string">"c:/test.xls"</span>));</div><div class="line">            <span class="comment">// 获得第一个工作表对象</span></div><div class="line">            Sheet sheet = book.getSheet(<span class="number">0</span>);</div><div class="line">            <span class="comment">// 得到第一列第一行的单元格</span></div><div class="line">            Cell cell = sheet.getCell(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">            String contents = cell.getContents();<span class="comment">//得到单元格内容</span></div><div class="line">            System.out.println(contents);</div><div class="line">            book.close();</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            System.out.println(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>程序的输出结果是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">test</div></pre></td></tr></table></figure>
+<p>Cell接口的方法还可以获取单元格行、列位置，单元格是否隐藏等属性。具体的参考jxl的API。</p>
+<h3 id="修改文件"><a href="#修改文件" class="headerlink" title="修改文件"></a>修改文件</h3><p>修改Excel文件除了打开文件的方式不同之外，其他与创建Excel是一样的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 修改Excel的类 </span></div><div class="line"><span class="keyword">import</span> java.io.File;</div><div class="line"></div><div class="line"><span class="keyword">import</span> jxl.Workbook;</div><div class="line"><span class="keyword">import</span> jxl.write.Label;</div><div class="line"><span class="keyword">import</span> jxl.write.WritableSheet;</div><div class="line"><span class="keyword">import</span> jxl.write.WritableWorkbook;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UpdateExcel</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">// 获得Excel文件</span></div><div class="line">            Workbook wb = Workbook.getWorkbook(<span class="keyword">new</span> File(<span class="string">"c:/test.xls"</span>));</div><div class="line">            <span class="comment">// 打开一个文件的副本，并且指定数据写回到原文件</span></div><div class="line">            WritableWorkbook book = Workbook.createWorkbook(<span class="keyword">new</span> File(<span class="string">"c:/test.xls"</span>), wb);</div><div class="line">            </div><div class="line">            <span class="comment">//修改原工作表数据</span></div><div class="line">            WritableSheet sheet1 = book.getSheet(<span class="number">0</span>);</div><div class="line">            sheet1.addCell(<span class="keyword">new</span> Label(<span class="number">0</span>, <span class="number">0</span>, <span class="string">"覆盖原来的test"</span>));</div><div class="line">            </div><div class="line">            <span class="comment">// 添加一个新工作表</span></div><div class="line">            WritableSheet sheet2 = book.createSheet(<span class="string">" 第二页 "</span>, <span class="number">1</span>);</div><div class="line">            sheet2.addCell(<span class="keyword">new</span> Label(<span class="number">0</span>, <span class="number">0</span>, <span class="string">" 第二页的测试数据 "</span>));</div><div class="line">            </div><div class="line">            book.write();</div><div class="line">            book.close();</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            System.out.println(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="导出文件"><a href="#导出文件" class="headerlink" title="导出文件"></a>导出文件</h2><p>附上一个导出文件例子。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">/** 报表导出按钮 */</span></div><div class="line">    $( <span class="string">'#exportBtn'</span> ).click( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span>( !$( <span class="string">'#frm'</span> ).validationEngine( <span class="string">'validate'</span> ) )</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        $( <span class="string">'#frm'</span> )[ <span class="number">0</span> ].action = <span class="string">'$&#123;ctx &#125;/exportAction.do?m=exportExcel'</span>;</div><div class="line">        $( <span class="string">'#frm'</span> )[ <span class="number">0</span> ].submit();</div><div class="line">        $( <span class="keyword">this</span> ).attr( <span class="string">'disabled'</span>, <span class="literal">true</span> );</div><div class="line">        <span class="built_in">window</span>.setTimeout( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="built_in">document</span>.getElementById( <span class="string">'exportBtn'</span> ).disabled = <span class="literal">false</span>;</div><div class="line">        &#125;, <span class="number">5000</span> );</div><div class="line">    &#125; );</div><div class="line">&#125; );</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** 根据浏览器类型，转换为当前浏览器支持的中文*/</span></div><div class="line">String fileName = <span class="string">"Excel工作表"</span>;</div><div class="line"></div><div class="line"><span class="comment">/** header 浏览器key */</span></div><div class="line">String userAgent = request.getHeader(<span class="string">"USER-AGENT"</span>).toUpperCase();</div><div class="line"><span class="keyword">if</span> (userAgent != <span class="keyword">null</span> &amp;&amp; userAgent.length() != <span class="number">0</span> &amp;&amp; fileName != <span class="keyword">null</span> &amp;&amp; fileName.length() != <span class="number">0</span>) &#123;</div><div class="line">    <span class="comment">/** header IE */</span></div><div class="line">    <span class="keyword">if</span> ( -<span class="number">1</span> != userAgent.indexOf(<span class="string">"MSIE"</span>) )</div><div class="line">        fileName = URLEncoder.encode(fileName, <span class="string">"UTF-8"</span>);</div><div class="line">    <span class="comment">/** header Mozilla */</span></div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( -<span class="number">1</span> != userAgent.indexOf(<span class="string">"MOZILLA"</span>) )</div><div class="line">        fileName = <span class="keyword">new</span> String(fileName.getBytes(), <span class="string">"ISO8859-1"</span>);</div><div class="line">    <span class="comment">/** header Safari */</span></div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( -<span class="number">1</span> != userAgent.indexOf(<span class="string">"SAFARI"</span>) )</div><div class="line">        fileName = <span class="keyword">new</span> String( fileName.getBytes(), <span class="string">"ISO8859-1"</span>);</div><div class="line">    <span class="comment">/** header Opera */</span></div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( -<span class="number">1</span> != userAgent.indexOf(<span class="string">"OPERA"</span>) )</div><div class="line">        fileName = <span class="keyword">new</span> String( fileName.getBytes(), <span class="string">"ISO8859-1"</span>);</div><div class="line">    <span class="comment">/** header 其它内核浏览器 */</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">        fileName = <span class="keyword">new</span> String( fileName.getBytes(), <span class="string">"ISO8859-1"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">response.setCharacterEncoding(<span class="string">"UTF-8"</span>);</div><div class="line">response.setContentType(<span class="string">"application/vnd.ms-excel"</span>);</div><div class="line">response.setHeader(<span class="string">"Content-disposition"</span>, <span class="keyword">new</span> StringBuffer(<span class="string">"attachment"</span>).append( <span class="string">";filename="</span> ).append( fileName ).append(<span class="string">".xls"</span>).toString() );</div><div class="line"></div><div class="line">WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());</div><div class="line">WritableSheet sheet = book.createSheet(<span class="string">"Excel工作表"</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="comment">//...</span></div><div class="line"></div><div class="line">book.write();</div><div class="line">book.close();</div></pre></td></tr></table></figure>
+<hr>
+<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/01/29/use-jxl-produce-excel/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/01/29/use-jxl-produce-excel/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/27/Java中的Listener-监听器/" rel="next" title="Java中的Listener 监听器">
+                <i class="fa fa-chevron-left"></i> Java中的Listener 监听器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/01/设计模式六大原则-单一职责原则/" rel="prev" title="设计模式六大原则 - 单一职责原则">
+                设计模式六大原则 - 单一职责原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/image/avatar.png"
+               alt="李天炜" />
+          <p class="site-author-name" itemprop="name">李天炜</p>
+          <p class="site-description motion-element" itemprop="description">不做半瓶水晃荡的人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tianweili/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.weibo.com/" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建环境"><span class="nav-number">2.</span> <span class="nav-text">搭建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作"><span class="nav-number">3.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建文件"><span class="nav-number">3.1.</span> <span class="nav-text">创建文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单元格操作"><span class="nav-number">3.2.</span> <span class="nav-text">单元格操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#合并单元格"><span class="nav-number">3.2.1.</span> <span class="nav-text">合并单元格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#行高和列宽"><span class="nav-number">3.2.2.</span> <span class="nav-text">行高和列宽</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据格式化"><span class="nav-number">3.3.</span> <span class="nav-text">数据格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字串格式化"><span class="nav-number">3.3.1.</span> <span class="nav-text">字串格式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对齐方式"><span class="nav-number">3.3.2.</span> <span class="nav-text">对齐方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取文件"><span class="nav-number">3.4.</span> <span class="nav-text">读取文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改文件"><span class="nav-number">3.5.</span> <span class="nav-text">修改文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导出文件"><span class="nav-number">4.</span> <span class="nav-text">导出文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李天炜</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("mgBCsnNGzmptjmsdJSPa56Pq-gzGzoHsz", "M83ciajGFb7RCDVkEn3VflT6");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
