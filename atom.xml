@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-12-06T07:52:52.000Z</updated>
+  <updated>2016-12-06T07:58:52.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,75 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux下使用nexus搭建maven私服</title>
+    <link href="http://yoursite.com/2015/03/17/Linux%E4%B8%8B%E4%BD%BF%E7%94%A8nexus%E6%90%AD%E5%BB%BAmaven%E7%A7%81%E6%9C%8D/"/>
+    <id>http://yoursite.com/2015/03/17/Linux下使用nexus搭建maven私服/</id>
+    <published>2015-03-17T09:26:57.000Z</published>
+    <updated>2016-12-06T07:58:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>有个maven私服可以很方便地管理我们的jar包和发布构建到远程仓库，本文就介绍了如何在linux下一步步使用nexus搭建maven私服。</p>
+<a id="more"></a>
+<p>原文链接：</p>
+<p><a href="http://tianweili.github.io/blog/2015/03/17/linux-nexus-maven-private-server/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/17/linux-nexus-maven-private-server/</a></p>
+<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><p>最新nexus下载地址：<a href="http://www.sonatype.org/nexus/go" target="_blank" rel="external">http://www.sonatype.org/nexus/go</a></p>
+<p>解压后会在同级目录中，出现两个文件夹：<code>nexus-oss-webapp-1.8.0</code>和<code>sonatype-work</code>，前者包含了nexus的运行环境和应用程序，后者包含了你自己的配置和数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir nexus</div><div class="line">$ tar xzvf /home/jili/nexus-2.7.0-05-bundle.tar.gz</div><div class="line">$ ls</div><div class="line">nexus-2.7.0-05  sonatype-work</div></pre></td></tr></table></figure>
+<h2 id="启动nexus"><a href="#启动nexus" class="headerlink" title="启动nexus"></a>启动nexus</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> bin/</div><div class="line">$ ls</div><div class="line">jsw  nexus  nexus.bat</div><div class="line">$ ./nexus</div><div class="line">Usage: ./nexus &#123; console | start | stop | restart | status | dump &#125;</div><div class="line">$ ./nexus start</div><div class="line">Starting Nexus OSS...</div><div class="line">Started Nexus OSS.</div></pre></td></tr></table></figure>
+<p>查看控制台：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./nexus console</div></pre></td></tr></table></figure>
+<p>显示未启动成功，报错如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">$ ./nexus console</div><div class="line">Running Nexus OSS...</div><div class="line">wrapper  | --&gt; Wrapper Started as Console</div><div class="line">wrapper  | Launching a JVM...</div><div class="line">wrapper  | JVM exited <span class="keyword">while</span> loading the application.</div><div class="line">jvm 1    | Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.UnsupportedClassVersionError: org/sonatype/nexus/bootstrap/jsw/JswLauncher : Unsupported major.minor version 51.0</div><div class="line">jvm 1    |      at java.lang.ClassLoader.defineClass1(Native Method)</div><div class="line">jvm 1    |      at java.lang.ClassLoader.defineClassCond(ClassLoader.java:632)</div><div class="line">jvm 1    |      at java.lang.ClassLoader.defineClass(ClassLoader.java:616)</div><div class="line">jvm 1    |      at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:141)</div><div class="line">jvm 1    |      at java.net.URLClassLoader.defineClass(URLClassLoader.java:283)</div><div class="line">jvm 1    |      at java.net.URLClassLoader.access<span class="variable">$000</span>(URLClassLoader.java:58)</div><div class="line">jvm 1    |      at java.net.URLClassLoader<span class="variable">$1</span>.run(URLClassLoader.java:197)</div><div class="line">jvm 1    |      at java.security.AccessController.doPrivileged(Native Method)</div><div class="line">jvm 1    |      at java.net.URLClassLoader.findClass(URLClassLoader.java:190)</div><div class="line">jvm 1    |      at java.lang.ClassLoader.loadClass(ClassLoader.java:307)</div><div class="line">jvm 1    |      at sun.misc.Launcher<span class="variable">$AppClassLoader</span>.loadClass(Launcher.java:301)</div><div class="line">jvm 1    |      at java.lang.ClassLoader.loadClass(ClassLoader.java:248)</div><div class="line">jvm 1    | Could not find the main class: org.sonatype.nexus.bootstrap.jsw.JswLauncher.  Program will exit.</div><div class="line">wrapper  | Reloading Wrapper configuration...</div><div class="line">wrapper  | Launching a JVM...</div><div class="line">wrapper  | JVM exited <span class="keyword">while</span> loading the application.</div><div class="line">.</div><div class="line">.</div><div class="line">.</div><div class="line">jvm 5    | Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.UnsupportedClassVersionError: org/sonatype/nexus/bootstrap/jsw/JswLauncher : Unsupported major.minor version 51.0</div><div class="line">jvm 5    |      at java.lang.ClassLoader.defineClass1(Native Method)</div><div class="line">jvm 5    |      at java.lang.ClassLoader.defineClassCond(ClassLoader.java:632)</div><div class="line">jvm 5    |      at java.lang.ClassLoader.defineClass(ClassLoader.java:616)</div><div class="line">jvm 5    |      at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:141)</div><div class="line">jvm 5    |      at java.net.URLClassLoader.defineClass(URLClassLoader.java:283)</div><div class="line">jvm 5    |      at java.net.URLClassLoader.access<span class="variable">$000</span>(URLClassLoader.java:58)</div><div class="line">jvm 5    |      at java.net.URLClassLoader<span class="variable">$1</span>.run(URLClassLoader.java:197)</div><div class="line">jvm 5    |      at java.security.AccessController.doPrivileged(Native Method)</div><div class="line">jvm 5    |      at java.net.URLClassLoader.findClass(URLClassLoader.java:190)</div><div class="line">jvm 5    |      at java.lang.ClassLoader.loadClass(ClassLoader.java:307)</div><div class="line">jvm 5    |      at sun.misc.Launcher<span class="variable">$AppClassLoader</span>.loadClass(Launcher.java:301)</div><div class="line">jvm 5    |      at java.lang.ClassLoader.loadClass(ClassLoader.java:248)</div><div class="line">jvm 5    | Could not find the main class: org.sonatype.nexus.bootstrap.jsw.JswLauncher.  Program will exit.</div><div class="line">wrapper  | There were 5 failed launches <span class="keyword">in</span> a row, each lasting less than 300 seconds.  Giving up.</div><div class="line">wrapper  |   There may be a configuration problem: please check the logs.</div><div class="line">wrapper  | &lt;-- Wrapper Stopped</div></pre></td></tr></table></figure>
+<p>原因：查找原因是JDK版本过低造成的，升级到最新的JDK7或者使用<code>nexus-2.4-bundle.tar.gz</code>版本JDK6会支持.</p>
+<p>Nexus所有版本下载地址：<a href="http://www.sonatype.org/nexus/archived" target="_blank" rel="external">http://www.sonatype.org/nexus/archived</a></p>
+<p>下载Nexus2.4重来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">nexus-2.4.0-09  sonatype-work</div><div class="line">$ <span class="built_in">cd</span> nexus-2.4.0-09/bin/</div><div class="line">$ ls</div><div class="line">jsw  nexus  nexus.bat</div><div class="line">$ ./nexus</div><div class="line">Usage: ./nexus &#123; console | start | stop | restart | status | dump &#125;</div><div class="line">$ ./nexus start</div><div class="line">Starting Nexus OSS...</div><div class="line">Started Nexus OSS.</div><div class="line">$ ./nexus console</div><div class="line">Running Nexus OSS...</div><div class="line">Nexus OSS is already running.</div></pre></td></tr></table></figure>
+<p>控制台显示启动成功。</p>
+<p>查看nexus日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> nexus-2.4.0-09/logs</div><div class="line">$ ls</div><div class="line">wrapper.log</div><div class="line">$ tail <span class="_">-f</span> wrapper.log</div></pre></td></tr></table></figure>
+<h2 id="配置nexus"><a href="#配置nexus" class="headerlink" title="配置nexus"></a>配置nexus</h2><p>访问网址：<a href="http://yourhostname:8081/nexus" target="_blank" rel="external">http://yourhostname:8081/nexus</a></p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/java/nexus-maven-1.png" alt=""></p>
+<p>右上角以admin登陆，默认用户名/密码：admin/admin123。</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/java/nexus-maven-2.png" alt=""></p>
+<p>3rd party、Snapshots、Releases这三个，分别用来保存第三方jar、项目组内部的快照、项目组内部的发布版.</p>
+<h2 id="手动添加第三方jar"><a href="#手动添加第三方jar" class="headerlink" title="手动添加第三方jar"></a>手动添加第三方jar</h2><p>将第三方的jar上传到nexus上面：</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/java/nexus-maven-3.png" alt=""></p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/java/nexus-maven-4.png" alt=""></p>
+<p>点击Upload Artifact(s)按钮提交后即上传。</p>
+<p>查看上传的jar包如下：</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/java/nexus-maven-5.png" alt=""></p>
+<p>在项目中使用私服的jar包配置pom.xml如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line">	<span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"</span>&gt;</div><div class="line">	<span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.vclk.mkt.crawler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>MarketingCrawler<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>MarketingCrawler<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="comment">&lt;!-- 仓库地址 --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">repositories</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">repository</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">name</span>&gt;</span>Team Nexus Repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://yourhostname:8081/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">repository</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></div><div class="line">	</div><div class="line">	<span class="comment">&lt;!-- 插件地址 --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">pluginRepositories</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">pluginRepository</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">name</span>&gt;</span>Team Nexus Repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://yourhostname:8081/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">pluginRepository</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">pluginRepositories</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="comment">&lt;!-- jar --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>de.innosystec<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>java-unrar<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>Maven在项目根目录下执行mvn eclipse:eclipse命令时，所依赖的jar包都会从私服中下载到本地并关联上项目，私服中没有就会从网络上下载到私服，本地再从私服下载。</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/java/nexus-maven-6.png" alt=""></p>
+<h2 id="自动发布构件到远程仓库"><a href="#自动发布构件到远程仓库" class="headerlink" title="自动发布构件到远程仓库"></a>自动发布构件到远程仓库</h2><p>在工程的pom.xml中添加：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">distributionManagement</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">repository</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-releases<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://yourhostname:8081/nexus/content/repositories/releases/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">repository</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">snapshotRepository</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-snapshots<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://yourhostname:8081/nexus/content/repositories/snapshots/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">snapshotRepository</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">distributionManagement</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>进入maven的安装目录apache-maven-3.1.1\conf目录下，向settings.xml配置文件中的<servers>语句块中添加如下所示：</servers></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">servers</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">server</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-releases<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">username</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">username</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">password</span>&gt;</span>admin123<span class="tag">&lt;/<span class="name">password</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">server</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">server</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-snapshots<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">username</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">username</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">password</span>&gt;</span>admin123<span class="tag">&lt;/<span class="name">password</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">server</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">servers</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>进入windows命令行，在工程所在目录下执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn deploy</div></pre></td></tr></table></figure>
+<p>所部署的包就自动上传到了nexus安装目录下的<code>/maven/nexus/sonatype-work/nexus/storage/releases/com/vclk/mkt/crawler/MarketingCrawler/0.3</code>目录</p>
+<h2 id="nexus仓库中各目录介绍"><a href="#nexus仓库中各目录介绍" class="headerlink" title="nexus仓库中各目录介绍"></a>nexus仓库中各目录介绍</h2><p>项目中的各种jar包和项目快照等都放在<code>/nexus/sonatype-work/nexus/storage/</code>目录下，在这个目录下包括以下各种目录和存放相应文件。</p>
+<p><code>/nexus/sonatype-work/nexus/storage/central</code> - 用于放置maven从中央仓库中下载下来的项目pom.xml中配置到的相关jar包；</p>
+<p><code>/nexus/sonatype-work/nexus/storage/thirdparty</code> - 用于放置自己手动上传的第三方jar包；</p>
+<p><code>/nexus/sonatype-work/nexus/storage/releases</code> - 用于放置项目deploy后的发布版。</p>
+<hr>
+<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/03/17/linux-nexus-maven-private-server/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/17/linux-nexus-maven-private-server/</a></p>
+<p>转载请注明作者和文章出处，谢谢。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有个maven私服可以很方便地管理我们的jar包和发布构建到远程仓库，本文就介绍了如何在linux下一步步使用nexus搭建maven私服。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="java" scheme="http://yoursite.com/categories/java/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>代理模式</title>
@@ -1447,62 +1516,6 @@
     
       <category term="其他技术" scheme="http://yoursite.com/categories/%E5%85%B6%E4%BB%96%E6%8A%80%E6%9C%AF/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>第一篇博文</title>
-    <link href="http://yoursite.com/2015/01/09/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E6%96%87/"/>
-    <id>http://yoursite.com/2015/01/09/第一篇博文/</id>
-    <published>2015-01-09T09:28:08.000Z</published>
-    <updated>2016-12-06T02:05:46.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>新的一年，又一个新的博客！</p>
-<p>IT干了几年，博客社区也换了几次。至今没有遇到特别中意的社区，<a href="http://www.cnblogs.com/hellojava/" target="_blank" rel="external">最近一次用得比较久的博客就是博客园了</a>，在博客园写博客给我的感觉相对是比较好的，但是仍然不能让我满意。于是我动起了自己搭建博客的念头，多方搜索比较下选择使用<a href="http://octopress.org/" target="_blank" rel="external">Octopress</a>+<a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages</a>来搭建自己的个人博客。</p>
-<a id="more"></a>
-<p>原文链接：<a href="http://tianweili.github.io/blog/2015/01/10/my-first-blog/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/01/10/my-first-blog/</a></p>
-<h2 id="为什么不再使用博客园写博客"><a href="#为什么不再使用博客园写博客" class="headerlink" title="为什么不再使用博客园写博客"></a>为什么不再使用博客园写博客</h2><h3 id="博客园氛围以-NET技术社区为主"><a href="#博客园氛围以-NET技术社区为主" class="headerlink" title="博客园氛围以.NET技术社区为主"></a>博客园氛围以.NET技术社区为主</h3><p>当然其他语言技术的博客也有，但几乎.NET要占去了一半甚至更多。这对于我一个做Java，做Python，做Perl……却唯独没做.NET的人来说略微有些显得“格格不入”——上面其他语言技术的博客太少了，尤其是高质量的更少！</p>
-<p>这样带来的后果就是与你“志同道合”能够互相讨论学习的人比较少，当然如果你主要是做.NET的那还是值得你考虑加入的。</p>
-<h3 id="能进行个性化定制的项目有点少"><a href="#能进行个性化定制的项目有点少" class="headerlink" title="能进行个性化定制的项目有点少"></a>能进行个性化定制的项目有点少</h3><p>不过坦白来说，博客园至少是主流几个技术社区能够进行个性化定制最多的技术博客社区了，否则我也不会最后用这一个以.NET为主的技术社区。</p>
-<p>但是我仍然觉得还不够，而且有诸多限制，很多想要的功能加不上，很多不想要的功能硬是塞给你，又去除不掉。</p>
-<h3 id="在上面写博客有诸多不爽"><a href="#在上面写博客有诸多不爽" class="headerlink" title="在上面写博客有诸多不爽"></a>在上面写博客有诸多不爽</h3><p>首先是写博客比较麻烦，各种调样式，而我又是对排版格式等有点追求的人，（但是我不是处女座，:)。）所以最后导致我写一篇博客花在调样式上面的时间比较多，而且很不方便。</p>
-<p>其次是代码样式格式着色都不是很喜欢，虽然我自己用CSS改了一下，但仍然觉得很丑。</p>
-<h3 id="上面高质量的博客很少"><a href="#上面高质量的博客很少" class="headerlink" title="上面高质量的博客很少"></a>上面高质量的博客很少</h3><p>感觉现在首页上质量较高的博客变得越来越少了，非.NET的更少，待下去也没什么意义。所以，我走了……</p>
-<h3 id="博客风格样式不好看"><a href="#博客风格样式不好看" class="headerlink" title="博客风格样式不好看"></a>博客风格样式不好看</h3><p>风格样式不好看，自己能修改的地方又不多。我本人是喜欢比较简洁一点的风格，写个博客嘛，不至于那么多花花绿绿的，所以我一进入一些特别花哨的博客就看得眼花缭乱，哈哈。</p>
-<p>So，只有自己建个博客来折腾咯。</p>
-<p>最后，不过我仍然很感谢<a href="http://www.cnblogs.com/hellojava/" target="_blank" rel="external">在博客园的那一段时光</a>，在博客园写博客的那一段日子也让自己进不了不少。（虽然还有很多的博文都存放在草稿里没有发布出来，那就让它继续躺在草稿箱里吧，-_-）至少博客园的博客部分是我所见过几个主流社区里最好的，只是感觉还不太适合自己而已。</p>
-<h2 id="为什么选择Octopress来写博客"><a href="#为什么选择Octopress来写博客" class="headerlink" title="为什么选择Octopress来写博客"></a>为什么选择Octopress来写博客</h2><p>基本上博客园的诸多不爽在这里都得到了解决，-_-!</p>
-<h3 id="可以由自己随意定制"><a href="#可以由自己随意定制" class="headerlink" title="可以由自己随意定制"></a>可以由自己随意定制</h3><p>当然也少不了折腾，查资料，配置，各种排查错误等等等的，也耗费了不少的时间和精力，并且由于国外被墙的缘故，还要删掉很多请求来进行优化访问速度。但是仍然感觉很爽，学习新知识，排查解决BUG后的成就感也挺大的。</p>
-<h3 id="博客风格样式都比较喜欢"><a href="#博客风格样式都比较喜欢" class="headerlink" title="博客风格样式都比较喜欢"></a>博客风格样式都比较喜欢</h3><p>我一直比较喜欢简洁素朴一些的博客风格。既然是博客，就让人注意到文章的内容，而不是被吸引到博客的皮肤和各种特效上。而且自己搭建的博客风格可以随意修改定制。</p>
-<p>而且Octopress<a href="http://pygments.org/" target="_blank" rel="external">使用Pygments来进行代码着色</a>，代码风格样式也是自己比较喜欢的，比如：</p>
-<figure class="highlight java"><figcaption><span>Sample.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.ltw;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Sample</span></span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</div><div class="line">		System.out.println(<span class="string">"Hello world!"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>并且Octopress搭建的博客无论是在PC端还是移动端，它的页面兼容性都比较好哦。</p>
-<h3 id="写博客比较爽"><a href="#写博客比较爽" class="headerlink" title="写博客比较爽"></a>写博客比较爽</h3><p>Octopress用的是Markdown来写博客，这正合自己的心意。用<a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown语法</a>写起来比较快，使用文本格式编写和存储，简洁轻便，还可以很方便得进行本地预览。</p>
-<p>并且文章的发布也很方便，<code>generate</code>后一条命令就<code>deploy</code>到GitHub上去了。</p>
-<h3 id="搭建过程比较折腾人"><a href="#搭建过程比较折腾人" class="headerlink" title="搭建过程比较折腾人"></a>搭建过程比较折腾人</h3><p>因为Octopress使用Ruby来写的，并且用到了Python的Pygments插件，还用到了Git来进行版本管理，使用GitHub Pages服务，博客和源代码提交到了GitHub来存储，图片又使用的七牛云存储，评论使用的多说评论系统，博客各方面的修改和个性化改动，还有被墙的缘故要进行访问优化等等。</p>
-<p>总之博客搭建过程中会遇到各种问题，滋味那叫一个酸爽。当然也有人一次成功，那即使运气了。不过遇到问题，解决问题也学到了不少东西。后面我会把一部分博客配置和遇到各种问题的解决方式写成博客记录和分享。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>新的一年，开通了新的博客！迎来了一个好的开端。接下来我就使用这个博客来记录和分享自己的学习和生活经历吧！</p>
-<hr>
-<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
-<p>原文链接：<a href="http://tianweili.github.io/blog/2015/01/10/my-first-blog/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/01/10/my-first-blog/</a></p>
-<p>转载请注明作者和文章出处，谢谢。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;新的一年，又一个新的博客！&lt;/p&gt;
-&lt;p&gt;IT干了几年，博客社区也换了几次。至今没有遇到特别中意的社区，&lt;a href=&quot;http://www.cnblogs.com/hellojava/&quot;&gt;最近一次用得比较久的博客就是博客园了&lt;/a&gt;，在博客园写博客给我的感觉相对是比较好的，但是仍然不能让我满意。于是我动起了自己搭建博客的念头，多方搜索比较下选择使用&lt;a href=&quot;http://octopress.org/&quot;&gt;Octopress&lt;/a&gt;+&lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt;来搭建自己的个人博客。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
-    
-    
-      <category term="octopress" scheme="http://yoursite.com/tags/octopress/"/>
-    
-      <category term="blog" scheme="http://yoursite.com/tags/blog/"/>
-    
-      <category term="github" scheme="http://yoursite.com/tags/github/"/>
     
   </entry>
   
