@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java, 设计模式, 六大原则, 单一职责原则" />
+  <meta name="keywords" content="简单工厂模式, 设计模式, java" />
 
 
 
@@ -86,16 +86,18 @@
 
 
 
-<meta name="description" content="初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的">
+<meta name="description" content="简单工厂模式就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设计模式六大原则 - 单一职责原则">
-<meta property="og:url" content="http://yoursite.com/2015/02/01/设计模式六大原则-单一职责原则/index.html">
+<meta property="og:title" content="简单工厂模式">
+<meta property="og:url" content="http://yoursite.com/2015/03/08/简单工厂模式/index.html">
 <meta property="og:site_name" content="李天炜">
-<meta property="og:description" content="初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的">
-<meta property="og:updated_time" content="2016-12-06T02:05:46.000Z">
+<meta property="og:description" content="简单工厂模式就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。">
+<meta property="og:image" content="http://7u2i08.com1.z0.glb.clouddn.com/design-pattern/simple-factory-uml.png">
+<meta property="og:updated_time" content="2016-12-06T07:31:27.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="设计模式六大原则 - 单一职责原则">
-<meta name="twitter:description" content="初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的">
+<meta name="twitter:title" content="简单工厂模式">
+<meta name="twitter:description" content="简单工厂模式就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。">
+<meta name="twitter:image" content="http://7u2i08.com1.z0.glb.clouddn.com/design-pattern/simple-factory-uml.png">
 
 
 
@@ -123,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2015/02/01/设计模式六大原则-单一职责原则/"/>
+  <link rel="canonical" href="http://yoursite.com/2015/03/08/简单工厂模式/"/>
 
 
 
 
 
-  <title> 设计模式六大原则 - 单一职责原则 | 李天炜 </title>
+  <title> 简单工厂模式 | 李天炜 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -250,7 +252,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/02/01/设计模式六大原则-单一职责原则/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/03/08/简单工厂模式/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="李天炜">
@@ -274,7 +276,7 @@
             
             
               
-                设计模式六大原则 - 单一职责原则
+                简单工厂模式
               
             
           </h1>
@@ -287,8 +289,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-02-01T17:56:35+08:00">
-                2015-02-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-03-08T19:49:20+08:00">
+                2015-03-08
               </time>
             
 
@@ -325,7 +327,7 @@
 
           
           
-             <span id="/2015/02/01/设计模式六大原则-单一职责原则/" class="leancloud_visitors" data-flag-title="设计模式六大原则 - 单一职责原则">
+             <span id="/2015/03/08/简单工厂模式/" class="leancloud_visitors" data-flag-title="简单工厂模式">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -350,25 +352,40 @@
       
 
       
-        <p>初学者在编程的时候可能一开始会有这样的经历，使用一个类来实现很多的功能，新添加的甚至不相关的功能都放在一个类里来实现，煮成了一锅大杂烩，往往使得某个类包罗万象，无所不能。可能刚开始实现功能比较简单，这样做不会引发什么特别大的问题。但是随着项目复杂度的提升，各种不相关的实现代码耦合在一起，一旦有功能的更改或增删，修改的代码很可能会导致其他功能的正常运行。这种编程方式显然是不可取的，也就是违背了所谓的单一职责原则。</p>
+        <p>简单工厂模式就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。</p>
 <a id="more"></a>
-<p>原文链接：<a href="http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/</a></p>
-<h2 id="什么是单一职责原则？"><a href="#什么是单一职责原则？" class="headerlink" title="什么是单一职责原则？"></a>什么是单一职责原则？</h2><p>单一职责原则的英文名称是Single Responsibility Principle，简称是SRP。SRP原则的解释是：There should never be more than one reason for a class to change。定义很简单，即不能存在多于一个导致类变更的原因。简单的说就是一个类只负责一项职责。</p>
-<p>在软件设计中，秉承着“高内聚，低耦合”的思想，让一个类仅负责一项职责，如果一个类有多于一项的职责，那么就代表这个类耦合性变高了，这些职责耦合在了一起，这是比较脆弱的设计。因为一旦某一项职责发生了改变，需要去更改代码，那么有可能会引起其他职责改变。所谓牵一发而动全身，这显然是我们所不愿意看到的，所以我们会把这个类分拆开来，由两个类来分别维护这两个职责，这样当一个职责发生改变，需要修改时，不会影响到另一个职责。</p>
-<p>需要说明的是单一职责原则不只是面向对象编程思想所特有的，只要是模块化的程序设计，都适用单一职责原则。</p>
-<h2 id="关于职责"><a href="#关于职责" class="headerlink" title="关于职责"></a>关于职责</h2><p>看到上面所述，或许有人会说这么简单谁不知道。的确，很多程序员即使没有学过设计模式，不知道单一职责原则，在编程的时候，在设计软件时也会有意识的遵循这一原则。因为谁都不希望修改一个地方会引发另外一个地方出现问题，而避免这种问题的最好处理方式就是设计时遵循单一职责原则。但是，我认为单一职责原则的难点是在于职责范围的认定。关于职责的认定是一个仁者见仁智者见智的话题，在实际开发中也会引起程序员之间的争论。有的人认为这些功能方法的实现目的很相似，必须要放在一个类中，有的人认为方法差别很大，必须要分拆成多个类，在多个类里面来实现。</p>
-<p>还有职责的扩散问题。软件一开发完上线后并不是一成不变的，随着社会的进步，需求的变更，软件的功能可能要做些维护更改，有时候会遇到职责扩散。所谓的职责扩散就是因为某种原因，职责R被分化为粒度更细的R1和R2。</p>
-<p>比如类C只负责一个职责R，这是符合单一职责原则的。但是后来需要把职责R拆分为职责R1和职责R2，那么这时候是否需要死守着单一职责原则，把类C也拆开为C1和C2。接着如果R1又需要细化为R11和R12呢……</p>
-<p>我们必须要意识到，一味的遵守单一职责原则，不停的分拆类所付出的开销是很大的。这时候就涉及到平衡的问题，平衡单一职责原则与修改造成的开销。我的观点是如果一个方法逻辑不复杂的情况下，可以修改方法实现，否则要拆分为两个方法，遵循方法级别的单一职责原则；如果一个类方法不多的情况下，可以只增加方法，而不用分拆为多个类，否则要拆分为多个类，遵循类级别的单一职责原则。</p>
-<h2 id="遵循单一职责原则的优点"><a href="#遵循单一职责原则的优点" class="headerlink" title="遵循单一职责原则的优点"></a>遵循单一职责原则的优点</h2><ul>
-<li>降低了类的复杂度。一个类只负责一项职责比负责多项职责要简单得多。</li>
-<li>提高了代码的可读性。一个类简单了，可读性自然就提高了。</li>
-<li>提高了系统的可维护性。代码的可读性高了，并且修改一项职责对其他职责影响降低了，可维护性自然就提高了。</li>
-<li>变更引起的风险变低了。单一职责最大的优点就是修改一个功能，对其他功能的影响显著降低。</li>
-</ul>
+<p>原文链接：</p>
+<p><a href="http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/</a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>简单工厂模式属于创建型模式，又叫做静态工厂方法(static factory method)。但是它并没有归为23种GOF设计模式其中。</p>
+<p>简单工厂模式是<strong>由工厂对象来决定创建哪一种产品类的实例</strong>。</p>
+<p>简单说就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。</p>
+<h2 id="UML类图"><a href="#UML类图" class="headerlink" title="UML类图"></a>UML类图</h2><p>简单工厂模式的一个基本的UML类图如下所示：</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/design-pattern/simple-factory-uml.png" alt=""></p>
+<p>在这个UML类图中包含以下角色：</p>
+<p>工厂（Factory）</p>
+<p>这是简单工厂模式的核心，由它来负责实现创建所有实例的逻辑。工厂对象用来被外界调用，根据传入的参数来决定创建哪一个产品对象。</p>
+<p>抽象产品（Abstract Product）</p>
+<p>抽象类或接口。是所有具体产品对象的父类，由它来定义所有具体产品的公共接口。</p>
+<p>具体产品（Concrete Product）</p>
+<p>具体产品是简单工厂模式的创建目标，所有创建的对象都是某个具体产品类的实例。</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Product</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductA</span> <span class="keyword">implements</span> <span class="title">Product</span></span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"ProductA function ..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductB</span> <span class="keyword">implements</span> <span class="title">Product</span></span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"ProductB function ..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">create</span><span class="params">(String productName)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (productName == <span class="keyword">null</span> || <span class="string">""</span>.equals(productName)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="string">"productA"</span>.equals(productName)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ProductA();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"productB"</span>.equals(productName)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ProductB();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Factory factory = <span class="keyword">new</span> Factory();</div><div class="line">        Product product1 = factory.create(<span class="string">"productA"</span>);</div><div class="line">        Product product2 = factory.create(<span class="string">"productB"</span>);</div><div class="line">        product1.function();</div><div class="line">        product2.function();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ProductA function ...</div><div class="line">ProductB function ...</div></pre></td></tr></table></figure>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>客户类和工厂类分开。消费者任何时候需要某种产品，只需向工厂请求即可。消费者无须修改就可以接纳新产品。</p>
+<p>外界不用关注对象创建逻辑，产品对象具体的创建过程由工厂来实现。外界直接给定信息来决定创建哪个产品对象。</p>
+<p>明确了各自的职责，有利于整个软件体系结构的优化。</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>违反高内聚责任分配原则，将所有的创建逻辑都集中在了工厂类身上。</p>
+<p>如果需要添加新的产品类，则需要修改工厂类。</p>
+<p>当产品类不断增多，工厂类对产品类型的判断条件过多交织在了一起，会造成逻辑过于复杂，对系统的扩展和维护不利。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>工厂类创建的产品对象比较少。</p>
+<p>外界只需要传入工厂类参数来获得产品对象，对于产品对象的创建过程不关心。</p>
+<p>简单工厂模式很容易违反高内聚责任分配原则，所以只是在一些很简单的情况下使用。</p>
+<h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><h3 id="附件的解压"><a href="#附件的解压" class="headerlink" title="附件的解压"></a>附件的解压</h3><p>在工作中，有一个项目模块中要求的功能是：登录邮箱，获取邮件，然后抓取邮件中的附件，下载下来，如果是压缩包，则进行解压，然后进行相应处理。在解压时就用到了简单工厂模式。附件压缩包格式不一，有zip,rar等格式，则把每一种格式的解压和处理都放到一个产品对象中，然后使用一个工厂类来决定创建哪一个产品进行相应的处理。</p>
+<p>由于这个压缩包解压方式并不多，判断逻辑并不太复杂，所以也没必要用工厂方法模式，增加代码复杂度。</p>
+<hr>
 <p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
-<p>原文链接：<a href="http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/02/25/single-responsibility-principle/</a></p>
-<p>转载请注明作者及出处，谢谢。</p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/</a></p>
+<p>转载请注明作者和文章出处，谢谢。</p>
 
       
     </div>
@@ -395,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/01/29/使用JXL组件操作Excel和导出文件/" rel="next" title="使用JXL组件操作Excel和导出文件">
-                <i class="fa fa-chevron-left"></i> 使用JXL组件操作Excel和导出文件
+              <a href="/2015/03/03/Log4j的配置与使用详解/" rel="next" title="Log4j的配置与使用详解">
+                <i class="fa fa-chevron-left"></i> Log4j的配置与使用详解
               </a>
             
           </div>
@@ -404,10 +421,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/02/04/设计模式六大原则-里氏替换原则/" rel="prev" title="设计模式六大原则 - 里氏替换原则">
-                设计模式六大原则 - 里氏替换原则 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -572,7 +585,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是单一职责原则？"><span class="nav-number">1.</span> <span class="nav-text">什么是单一职责原则？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于职责"><span class="nav-number">2.</span> <span class="nav-text">关于职责</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遵循单一职责原则的优点"><span class="nav-number">3.</span> <span class="nav-text">遵循单一职责原则的优点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UML类图"><span class="nav-number">2.</span> <span class="nav-text">UML类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">3.</span> <span class="nav-text">代码示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺点"><span class="nav-number">5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用实例"><span class="nav-number">7.</span> <span class="nav-text">应用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#附件的解压"><span class="nav-number">7.1.</span> <span class="nav-text">附件的解压</span></a></li></ol></li></ol></div>
             
 
           </div>

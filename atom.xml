@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-12-06T07:03:00.000Z</updated>
+  <updated>2016-12-06T07:31:27.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,60 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>简单工厂模式</title>
+    <link href="http://yoursite.com/2015/03/08/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://yoursite.com/2015/03/08/简单工厂模式/</id>
+    <published>2015-03-08T11:49:20.000Z</published>
+    <updated>2016-12-06T07:31:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>简单工厂模式就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。</p>
+<a id="more"></a>
+<p>原文链接：</p>
+<p><a href="http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/</a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>简单工厂模式属于创建型模式，又叫做静态工厂方法(static factory method)。但是它并没有归为23种GOF设计模式其中。</p>
+<p>简单工厂模式是<strong>由工厂对象来决定创建哪一种产品类的实例</strong>。</p>
+<p>简单说就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。</p>
+<h2 id="UML类图"><a href="#UML类图" class="headerlink" title="UML类图"></a>UML类图</h2><p>简单工厂模式的一个基本的UML类图如下所示：</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/design-pattern/simple-factory-uml.png" alt=""></p>
+<p>在这个UML类图中包含以下角色：</p>
+<p>工厂（Factory）</p>
+<p>这是简单工厂模式的核心，由它来负责实现创建所有实例的逻辑。工厂对象用来被外界调用，根据传入的参数来决定创建哪一个产品对象。</p>
+<p>抽象产品（Abstract Product）</p>
+<p>抽象类或接口。是所有具体产品对象的父类，由它来定义所有具体产品的公共接口。</p>
+<p>具体产品（Concrete Product）</p>
+<p>具体产品是简单工厂模式的创建目标，所有创建的对象都是某个具体产品类的实例。</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Product</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductA</span> <span class="keyword">implements</span> <span class="title">Product</span></span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"ProductA function ..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductB</span> <span class="keyword">implements</span> <span class="title">Product</span></span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"ProductB function ..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">create</span><span class="params">(String productName)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (productName == <span class="keyword">null</span> || <span class="string">""</span>.equals(productName)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="string">"productA"</span>.equals(productName)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ProductA();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"productB"</span>.equals(productName)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ProductB();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Factory factory = <span class="keyword">new</span> Factory();</div><div class="line">        Product product1 = factory.create(<span class="string">"productA"</span>);</div><div class="line">        Product product2 = factory.create(<span class="string">"productB"</span>);</div><div class="line">        product1.function();</div><div class="line">        product2.function();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ProductA function ...</div><div class="line">ProductB function ...</div></pre></td></tr></table></figure>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>客户类和工厂类分开。消费者任何时候需要某种产品，只需向工厂请求即可。消费者无须修改就可以接纳新产品。</p>
+<p>外界不用关注对象创建逻辑，产品对象具体的创建过程由工厂来实现。外界直接给定信息来决定创建哪个产品对象。</p>
+<p>明确了各自的职责，有利于整个软件体系结构的优化。</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>违反高内聚责任分配原则，将所有的创建逻辑都集中在了工厂类身上。</p>
+<p>如果需要添加新的产品类，则需要修改工厂类。</p>
+<p>当产品类不断增多，工厂类对产品类型的判断条件过多交织在了一起，会造成逻辑过于复杂，对系统的扩展和维护不利。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>工厂类创建的产品对象比较少。</p>
+<p>外界只需要传入工厂类参数来获得产品对象，对于产品对象的创建过程不关心。</p>
+<p>简单工厂模式很容易违反高内聚责任分配原则，所以只是在一些很简单的情况下使用。</p>
+<h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><h3 id="附件的解压"><a href="#附件的解压" class="headerlink" title="附件的解压"></a>附件的解压</h3><p>在工作中，有一个项目模块中要求的功能是：登录邮箱，获取邮件，然后抓取邮件中的附件，下载下来，如果是压缩包，则进行解压，然后进行相应处理。在解压时就用到了简单工厂模式。附件压缩包格式不一，有zip,rar等格式，则把每一种格式的解压和处理都放到一个产品对象中，然后使用一个工厂类来决定创建哪一个产品进行相应的处理。</p>
+<p>由于这个压缩包解压方式并不多，判断逻辑并不太复杂，所以也没必要用工厂方法模式，增加代码复杂度。</p>
+<hr>
+<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/08/simple-factory-pattern/</a></p>
+<p>转载请注明作者和文章出处，谢谢。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;简单工厂模式就是工厂对象根据传入的参数，动态的决定创建哪一种产品类的实例，而这些产品类继承自一个父类或一个接口。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="设计模式" scheme="http://yoursite.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Log4j的配置与使用详解</title>
@@ -1440,148 +1494,6 @@
     <summary type="html">
     
       骑车去西藏—第5天—跑马溜溜的山上，情歌之城，康定
-    
-    </summary>
-    
-      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>骑车去西藏—第4天—泸定-康定，坚定的信心</title>
-    <link href="http://yoursite.com/2013/07/15/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC4%E5%A4%A9%E2%80%94%E6%B3%B8%E5%AE%9A-%E5%BA%B7%E5%AE%9A%EF%BC%8C%E5%9D%9A%E5%AE%9A%E7%9A%84%E4%BF%A1%E5%BF%83/"/>
-    <id>http://yoursite.com/2013/07/15/骑车去西藏—第4天—泸定-康定，坚定的信心/</id>
-    <published>2013-07-15T10:07:38.000Z</published>
-    <updated>2016-12-06T02:32:42.000Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a>
-<p>原文链接：</p>
-<p><a href="http://tianweili.github.io/blog/2013/07/15/cycling-to-tibet-4/" target="_blank" rel="external">http://tianweili.github.io/blog/2013/07/15/cycling-to-tibet-4/</a></p>
-<h2 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h2><p>行程：泸定—烹坝乡—瓦斯沟—小天都隧道—康定</p>
-<p>里程：51KM</p>
-<p>海拔：泸定1330M—康定2395M</p>
-<h2 id="前半程"><a href="#前半程" class="headerlink" title="前半程"></a>前半程</h2><p>本来计划今天晚点出发的，但是养成的习惯使得自己仍然五点多就醒了，睡不着索性就起来六点多就出发了。宋还在睡觉，后来才知道他竟然九点半才出发！</p>
-<p>都快出了泸定，没看到这么早卖馒头的，就买了个大饼当早餐。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-108.jpg" alt=""></p>
-<p>在大渡河和崇山峻岭间骑行。感觉大渡河和之前遇到的青衣江有着显著区别，青衣江像朝气蓬勃的年轻人，奔流湍急。大渡河如沉稳内敛的老者，胸怀宽大，波澜不惊。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-109.jpg" alt=""></p>
-<p>今天上午路上遇到的骑友特别多，可能是因为不需要翻山的缘故吧，搭车的人比较少，浩浩荡荡的可以绵延好几公里。</p>
-<p>这是我前面浩浩荡荡的队伍……</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-110.jpg" alt=""></p>
-<p>这是跟在我后面的……</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-111.jpg" alt=""></p>
-<p>今天上午骑起来特别轻松的感觉，可能是之前痛苦的折磨所磨练出的意志，已经对这些小困难小挫折完全免疫了。现在感觉缓上坡对我来说就如同骑在平路，平路如同下坡，而下坡那骑起来就如同飞一般的感觉了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-112.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-113.jpg" alt=""></p>
-<p>大概骑到八九点钟的样子，此时已经骑了二十多公里。我心想还剩二十多公里，那今天岂不是可以在12点钱到达康定，心里开始计划着美美的在康定吃上一顿午饭了（后来知道是异想天开了）。康定，我来了！脚下不禁加快了蹬踏的节奏。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-114.jpg" alt=""></p>
-<p>天空真的很蓝，大晴天，不过太阳确实有点大，温度依旧是四十多度啊，依旧猛喝水，猛流汗。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-115.jpg" alt=""></p>
-<p>蓝天与白云</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-116.jpg" alt=""></p>
-<p>蓝蓝的天空与青青的山川在前方</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-117.jpg" alt=""></p>
-<p>今天路上的风景除了蓝天白云，那就只有两侧的青山了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-118.jpg" alt=""></p>
-<p>路边的野果子，饿了不知能吃否？</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-119.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-120.jpg" alt=""></p>
-<p>天天看到的喇嘛？</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-121.jpg" alt=""></p>
-<h2 id="后半程"><a href="#后半程" class="headerlink" title="后半程"></a>后半程</h2><p>就这样来到了瓦斯沟，好日子到头了，接下来就全部都是惨绝人寰的上坡。有人说川藏线上真正的挑战是从下瓦斯开始的，我是感觉从下瓦斯到上瓦斯再一直到康定，坡度是越来越陡的。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-122.jpg" alt=""></p>
-<p>折多河与大渡河在瓦斯沟会合，从这里开始就要告别一直陪伴着我的大渡河，沿着折多河往上走了。 </p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-123.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-124.jpg" alt=""></p>
-<p>上坡开始慢慢多且急了起来，比如转了个弯突然看到面前……</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-125.jpg" alt=""></p>
-<p>停在路边休息的人开始多了起来</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-126.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-127.jpg" alt=""></p>
-<p>又热又累，面对上坡，大家开始用推的了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-128.jpg" alt=""></p>
-<p>不过依旧有毅力顽强的人坚持</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-129.jpg" alt=""></p>
-<p>终于看到了游记中经常提及的地方，这地名……让人……</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-130.jpg" alt=""></p>
-<p>又开始饿了，一天饿个五六回都不是个事儿，肚子开始闹，身体也罢工了。停下来开始吃午饭了，馒头+大饼就是今天的午餐。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-131.jpg" alt=""></p>
-<p>路边找了户人家，把车停下来，坐在屋檐下的椅子上，舒服啊。边啃馒头边和骑友以及当地人一起聊天，一大叔听说我要去西藏，不停的对我竖大拇指说加油，哈哈。不过他又说还看到徒步去拉萨朝圣的人，三步一伏地叩首，要走好几年。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-132.jpg" alt=""></p>
-<p>我起身准备出发，小狗抓着我的腿不让我走，这么短的时间就有了感情？还是怪我没给它馒头吃？</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-133.jpg" alt=""></p>
-<p>天天看到路边在修车子，他们队有个人车胎爆了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-134.jpg" alt=""></p>
-<p>飞流直下的山泉</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-135.jpg" alt=""></p>
-<p>管子里出来的都是山上下来的泉水，源源不断的放着，山泉冰凉刺骨，正好用来解暑，好多人都停了下来享受这清凉一刻。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-136.jpg" alt=""></p>
-<p>不过这个人很凶，不愿意让我们在她家门前休息，连门前空地都不让停，非要把我们赶到公路上。谁挨着她那地方，立马一水管水把你一身从头到尾给冲个透心凉。这是我一路上遇到唯一一个不友好的当地人。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-137.jpg" alt=""></p>
-<p>一上路就是望不到头的上坡，有的人直接扒着大货车走了，非常危险。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-138.jpg" alt=""></p>
-<p>后半程一路陪伴着我的折多河</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-139.jpg" alt=""></p>
-<h2 id="涂鸦集锦"><a href="#涂鸦集锦" class="headerlink" title="涂鸦集锦"></a>涂鸦集锦</h2><p>公路上和两边到处都是骑行者们的涂鸦，而到了上坡多，最累人的地方，往往也是涂鸦最多的地方。公路提示牌已经惨不忍睹了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-140.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-141.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-142.jpg" alt=""></p>
-<p>还有这种骗人的“伪路标”，比如前面还有X公里就到了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-143.jpg" alt=""></p>
-<p>“姐的心中有一万只草泥马在拽着姐奔腾”，留言要慎重，马上就有后来者给你补上一句让你吐血。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-144.jpg" alt=""></p>
-<p>当然也会有很多脏话，formes说他这次来原本觉得是很神圣的一件事，但是却有很多事情改变了他之前的看法，让他很失望，比如路边出现的没有素质的脏话。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-145.jpg" alt=""></p>
-<h2 id="巾帼不让须眉"><a href="#巾帼不让须眉" class="headerlink" title="巾帼不让须眉"></a>巾帼不让须眉</h2><p>在准备过一个黑漆漆的隧洞的时候，我停下来装车前灯。这时后面两个人问我是不是从上海过来的，我很奇怪，一问才知道他们误以为我是和前面一个女生一起的。他们说刚才问过那个女生是从上海过来的，我不相信。看到她的驮包雨罩上写着“318，上海—拉萨—尼泊尔”的字样，我好奇起来。于是我过去找她攀谈起来，得到了确定的答案，她竟然是从上海骑过来的，已经骑了一个多月了，反正当时我整个人都被震撼到了。</p>
-<p>一想到别人一个女生，都能从上海骑到这（而且听她说她今天的目的地并不是康定，还要往前一些）。这才是真正的用铁环丈量G318啊！想到之前自己才骑了几天，就喊的要死要活那样子，不禁羞愧起来。其实骑车去西藏并不需要多好的装备，考验的不仅仅是体力，考验的更是意志力！就这样自己我一改之前萎靡不振的精神，后面的上坡我一直坚持到了康定，这种精神也一直支持着我翻过后面的高山。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-146.jpg" alt=""></p>
-<p>掏出手机给她照一张，她说你也是用的小米1啊，原来她的手机也是，看来小米真是大街货啊。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-147.jpg" alt=""></p>
-<p>后面骑了几公里，又碰到了，就合了个影。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-148.jpg" alt=""></p>
-<p>她提出摆个二的姿势……</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-149.jpg" alt=""></p>
-<h2 id="康定，要到了"><a href="#康定，要到了" class="headerlink" title="康定，要到了"></a>康定，要到了</h2><p>今天又遇到了之前爬二郎山遇到的一个骑友，一路上和他聊的比较多。在休息的时候，他跑到一个素不相识的骑友那拿了很多李子来给我吃，我不好意思收，他说没关系，出门在外，大家虽然互相不认识，但是这种情况下也不用讲究那么多了。让我自己再去拿，我没好意思去，他又去抓了几把递给我。</p>
-<p>感觉在异地他乡，艰苦的环境，能遇到这么一些骑友，向着共同的目标，一起帮助，互相鼓励，很感动。后面我们是一起到了康定。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-150.jpg" alt=""></p>
-<p>奋力骑上来，回头看着骑过的上坡，很有成就感，大部分人是推着上来的。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-151.jpg" alt=""></p>
-<p>康定，就在前面</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-152.jpg" alt=""></p>
-<p>康定城，依山傍水的，进了城里，也能看到周围到处的青山白云和蓝天。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-153.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-154.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-155.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-156.jpg" alt=""></p>
-<p>下午3点就到了康定，给宋和formes打电话，打了很多遍才通，可能在赶路吧。后来我在大风中整整等了两个多小时，宋才赶到，formes要晚上才能到了。</p>
-<p>我和宋先去找住宿和吃饭，康定是旅游城市，物价确实很贵，食宿都要比之前高出不少，找了好多家才找到个性价比不错的地方，还有就是一定要讲价。</p>
-<p>去吃饭的时候，老板可能是一看到我们两个人是骑车过来的，知道我们很饿了，直接端上来一大桶米饭！宋点的菜依旧是番茄炒蛋。吃完结账的时候，老板还给我们优惠了点，是想让我们明天早上也过来吃她店里的早餐，我们答应着，不过后来早上还是没过来吃，后来感觉挺对不起人家的。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-157.jpg" alt=""></p>
-<p>宋一回到住地还是老样子直接往床上一躺就不动了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-158.jpg" alt=""></p>
-<p>由于一路上头巾面罩长袖360度无死角的罩着，相比他们俩，我没怎么有被晒过的痕迹。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-159.jpg" alt=""></p>
-<p>晚上大概八九点钟的样子，风尘仆仆的formes赶到了，这是这几天第一次见到他，整个人也都晒得变了样（自己当然也好不到哪里去），个中辛苦不用多说。这样今天我们这个队伍又齐整了，可以一起继续向前挑战，我们明天将要在康定休整一天。</p>
-<h2 id="骑行日志"><a href="#骑行日志" class="headerlink" title="骑行日志"></a>骑行日志</h2><ul>
-<li><a href="http://tianweili.github.io/blog/2013/03/11/cycling-to-tibet-0/" target="_blank" rel="external">骑车去西藏—第0天—成都印象</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/12/cycling-to-tibet-1/" target="_blank" rel="external">骑车去西藏—第1天—出师不利</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/13/cycling-to-tibet-2/" target="_blank" rel="external">骑车去西藏—第2天—牛刀小试</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/14/cycling-to-tibet-3/" target="_blank" rel="external">骑车去西藏—第3天—爬上了二郎山，我就是二郎神</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/15/cycling-to-tibet-4/" target="_blank" rel="external">骑车去西藏—第4天—泸定-康定，坚定的信心</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/16/cycling-to-tibet-5/" target="_blank" rel="external">骑车去西藏—第5天—跑马溜溜的山上，情歌之城，康定</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/17/cycling-to-tibet-6/" target="_blank" rel="external">骑车去西藏—第6天—折多山，折磨人多的山</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/18/cycling-to-tibet-7/" target="_blank" rel="external">骑车去西藏—第7天—高尔寺山，待续</a></li>
-</ul>
-<hr>
-<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
-<p>原文链接：<a href="http://tianweili.github.io/blog/2013/07/15/cycling-to-tibet-4/" target="_blank" rel="external">http://tianweili.github.io/blog/2013/07/15/cycling-to-tibet-4/</a></p>
-<p>转载请注明作者和文章出处，谢谢。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      骑车去西藏—第4天—泸定-康定，坚定的信心
     
     </summary>
     
