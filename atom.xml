@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-12-06T02:22:21.000Z</updated>
+  <updated>2016-12-06T07:03:00.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,172 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Log4j的配置与使用详解</title>
+    <link href="http://yoursite.com/2015/03/03/Log4j%E7%9A%84%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://yoursite.com/2015/03/03/Log4j的配置与使用详解/</id>
+    <published>2015-03-03T11:38:49.000Z</published>
+    <updated>2016-12-06T07:03:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Log4j是Apache的一个开放源代码项目，通过使用Log4j，我们可以控制日志信息输送的目的地是控制台、文件、GUI组件、甚至是套接口服务器、NT的事件记录器、UNIX Syslog守护进程等；我们也可以控制每一条日志的输出格式；通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。</p>
+<a id="more"></a>
+<p>原文链接：</p>
+<p><a href="http://tianweili.github.io/blog/2015/03/03/log4j/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/03/log4j/</a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Log4j由三个重要的组件构成：<strong>日志信息的优先级，日志信息的输出目的地，日志信息的输出格式</strong>。日志信息的优先级从高到低有<code>ERROR</code>、<code>WARN</code>、<code>INFO</code>、<code>DEBUG</code>，分别用来指定这条日志信息的重要程度；日志信息的输出目的地指定了日志将打印到控制台还是文件中；而输出格式则控制了日志信息的显示内容。 </p>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>其实也可以完全不使用配置文件，而是在代码中配置Log4j环境。但是，使用配置文件将使您的应用程序更加灵活。</p>
+<p>Log4j支持两种配置文件格式，一种是<code>XML格式</code>的文件，一种是<code>properties格式</code>的文件。以下介绍使用properties格式做为配置文件的方法：</p>
+<p>基本的格式如下： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#配置根Logger</div><div class="line">log4j.rootLogger  =   [ level ]   ,  appenderName1 ,  appenderName2 ,  …</div><div class="line"></div><div class="line">#配置日志信息输出目的地Appender</div><div class="line">log4j.appender.appenderName  =  fully.qualified.name.of.appender.class </div><div class="line">　　log4j.appender.appenderName.option1  =  value1 </div><div class="line">　　… </div><div class="line">　　log4j.appender.appenderName.optionN  =  valueN </div><div class="line"></div><div class="line">#配置日志信息的格式（布局）</div><div class="line">log4j.appender.appenderName.layout  =  fully.qualified.name.of.layout.class </div><div class="line">　　log4j.appender.appenderName.layout.option1  =  value1 </div><div class="line">　　… </div><div class="line">　　log4j.appender.appenderName.layout.optionN  =  valueN</div></pre></td></tr></table></figure>
+<h3 id="1-配置根Logger"><a href="#1-配置根Logger" class="headerlink" title="1.配置根Logger"></a>1.配置根Logger</h3><p>语法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.rootLogger = [ level ] , appenderName, appenderName, …</div></pre></td></tr></table></figure>
+<p>其中，level 是日志记录的优先级，分为<code>OFF</code>、<code>FATAL</code>、<code>ERROR</code>、<code>WARN</code>、<code>INFO</code>、<code>DEBUG</code>、<code>ALL</code>或者你定义的级别。Log4j建议只使用四个级别，优先级从高到低分别是<code>ERROR</code>、<code>WARN</code>、<code>INFO</code>、<code>DEBUG</code>。通过在这里定义的级别，您可以控制到应用程序中相应级别的日志信息的开关。比如在这里定义了INFO级别，则应用程序中所有DEBUG级别的日志信息将不被打印出来。</p>
+<p>appenderName就是指定日志信息输出到哪个地方。您可以同时指定多个输出目的地。 </p>
+<h3 id="2-配置日志信息输出目的地Appender"><a href="#2-配置日志信息输出目的地Appender" class="headerlink" title="2.配置日志信息输出目的地Appender"></a>2.配置日志信息输出目的地Appender</h3><p>Log4j提供的appender有以下几种：</p>
+<ul>
+<li><code>org.apache.log4j.ConsoleAppender</code>（控制台），</li>
+<li><code>org.apache.log4j.FileAppender</code>（文件），</li>
+<li><code>org.apache.log4j.DailyRollingFileAppender</code>（每天产生一个日志文件），</li>
+<li><code>org.apache.log4j.RollingFileAppender</code>（文件大小到达指定尺寸的时候产生一个新的文件），</li>
+<li><code>org.apache.log4j.WriterAppender</code>（将日志信息以流格式发送到任意指定的地方）</li>
+</ul>
+<p>其中，每种appender可以定义的option1如下：</p>
+<h4 id="1-ConsoleAppender-选项"><a href="#1-ConsoleAppender-选项" class="headerlink" title="(1).ConsoleAppender 选项"></a>(1).ConsoleAppender 选项</h4><ul>
+<li><code>Threshold=WARN</code>:指定日志消息的输出最低层次。 </li>
+<li><code>ImmediateFlush=true</code>:默认值是true,意谓着所有的消息都会被立即输出。 </li>
+<li><code>Target=System.err</code>:默认情况下是：System.out,指定输出控制台 </li>
+</ul>
+<h4 id="2-FileAppender-选项"><a href="#2-FileAppender-选项" class="headerlink" title="(2).FileAppender 选项"></a>(2).FileAppender 选项</h4><ul>
+<li><code>Threshold=WARN</code>:指定日志消息的输出最低层次。 </li>
+<li><code>ImmediateFlush=true</code>:默认值是true,意谓着所有的消息都会被立即输出。 </li>
+<li><code>File=mylog.txt</code>:指定消息输出到mylog.txt文件。 </li>
+<li><code>Append=false</code>:默认值是true,即将消息增加到指定文件中，false指将消息覆盖指定的文件内容。 </li>
+</ul>
+<h4 id="3-DailyRollingFileAppender-选项"><a href="#3-DailyRollingFileAppender-选项" class="headerlink" title="(3).DailyRollingFileAppender 选项"></a>(3).DailyRollingFileAppender 选项</h4><ul>
+<li><code>Threshold=WARN</code>:指定日志消息的输出最低层次。 </li>
+<li><code>ImmediateFlush=true</code>:默认值是true,意谓着所有的消息都会被立即输出。 </li>
+<li><code>File=mylog.txt</code>:指定消息输出到mylog.txt文件。 </li>
+<li><code>Append=false</code>:默认值是true,即将消息增加到指定文件中，false指将消息覆盖指定的文件内容。 </li>
+<li><code>DatePattern=&#39;.&#39;yyyy-ww</code>:每周滚动一次文件，即每周产生一个新的文件。当然也可以指定按月、周、天、时和分。即对应的格式如下： <ul>
+<li><code>&#39;.&#39;yyyy-MM</code>: 每月 </li>
+<li><code>&#39;.&#39;yyyy-ww</code>: 每周 </li>
+<li><code>&#39;.&#39;yyyy-MM-dd</code>: 每天 </li>
+<li><code>&#39;.&#39;yyyy-MM-dd-a</code>: 每天两次 </li>
+<li><code>&#39;.&#39;yyyy-MM-dd-HH</code>: 每小时 </li>
+<li><code>&#39;.&#39;yyyy-MM-dd-HH-mm</code>: 每分钟 </li>
+</ul>
+</li>
+</ul>
+<h4 id="4-RollingFileAppender-选项"><a href="#4-RollingFileAppender-选项" class="headerlink" title="(4).RollingFileAppender 选项"></a>(4).RollingFileAppender 选项</h4><ul>
+<li><code>Threshold=WARN</code>:指定日志消息的输出最低层次。 </li>
+<li><code>ImmediateFlush=true</code>:默认值是true,意谓着所有的消息都会被立即输出。 </li>
+<li><code>File=mylog.txt</code>:指定消息输出到mylog.txt文件。 </li>
+<li><code>Append=false</code>:默认值是true,即将消息增加到指定文件中，false指将消息覆盖指定的文件内容。 </li>
+<li><code>MaxFileSize=100KB</code>: 后缀可以是KB, MB 或者是 GB. 在日志文件到达该大小时，将会自动滚动，即将原来的内容移到mylog.log.1文件。 </li>
+<li><code>MaxBackupIndex=2</code>:指定可以产生的滚动文件的最大数。</li>
+</ul>
+<h3 id="3-配置日志信息的输出格式"><a href="#3-配置日志信息的输出格式" class="headerlink" title="3.配置日志信息的输出格式"></a>3.配置日志信息的输出格式</h3><p>Log4j提供的layout有以下几种：</p>
+<ul>
+<li><code>org.apache.log4j.HTMLLayout</code>（以HTML表格形式布局），</li>
+<li><code>org.apache.log4j.PatternLayout</code>（可以灵活地指定布局模式），</li>
+<li><code>org.apache.log4j.SimpleLayout</code>（包含日志信息的级别和信息字符串），</li>
+<li><code>org.apache.log4j.TTCCLayout</code>（包含日志产生的时间、线程、类别等等信息）</li>
+</ul>
+<h3 id="4-输出格式设置"><a href="#4-输出格式设置" class="headerlink" title="4.输出格式设置"></a>4.输出格式设置</h3><p>在配置文件中可以通过<code>log4j.appender.A1.layout.ConversionPattern</code>设置日志输出格式。</p>
+<p>参数：</p>
+<ul>
+<li><code>%p</code>: 输出日志信息优先级，即DEBUG，INFO，WARN，ERROR，FATAL, </li>
+<li><code>%d</code>: 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss,SSS}，输出类似：2002年10月18日 22：10：28，921 </li>
+<li><code>%r</code>: 输出自应用启动到输出该log信息耗费的毫秒数 </li>
+<li><code>%c</code>: 输出日志信息所属的类目，通常就是所在类的全名 </li>
+<li><code>%t</code>: 输出产生该日志事件的线程名 </li>
+<li><code>%l</code>: 输出日志事件的发生位置，相当于%C.%M(%F:%L)的组合,包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10) </li>
+<li><code>%x</code>: 输出和当前线程相关联的NDC(嵌套诊断环境),尤其用到像java servlets这样的多客户多线程的应用中。 </li>
+<li><code>%%</code>: 输出一个”%”字符 </li>
+<li><code>%F</code>: 输出日志消息产生时所在的文件名称 </li>
+<li><code>%L</code>: 输出代码中的行号 </li>
+<li><code>%m</code>: 输出代码中指定的消息,产生的日志具体信息 </li>
+<li><code>%n</code>: 输出一个回车换行符，Windows平台为”\r\n”，Unix平台为”\n”输出日志信息换行 </li>
+</ul>
+<p>可以在%与模式字符之间加上修饰符来控制其最小宽度、最大宽度、和文本的对齐方式。如： </p>
+<ul>
+<li><code>%20c</code>：指定输出category的名称，最小的宽度是20，如果category的名称小于20的话，默认的情况下右对齐。 </li>
+<li><code>%-20c</code>:指定输出category的名称，最小的宽度是20，如果category的名称小于20的话，”-”号指定左对齐。 </li>
+<li><code>%.30c</code>:指定输出category的名称，最大的宽度是30，如果category的名称大于30的话，就会将左边多出的字符截掉，但小于30的话也不会有空格。 </li>
+<li><code>%20.30c</code>:如果category的名称小于20就补空格，并且右对齐，如果其名称长于30字符，就从左边交远销出的字符截掉。 </li>
+</ul>
+<h2 id="在程序中的使用"><a href="#在程序中的使用" class="headerlink" title="在程序中的使用"></a>在程序中的使用</h2><p>在程序中使用Log4j之前，首先要将<code>commons-logging.jar</code>和<code>logging-log4j-1.2.9.jar</code>导入到classpath中，并将log4j.properties放于src根目录中。接下来就可以使用了。</p>
+<h3 id="1-得到记录器"><a href="#1-得到记录器" class="headerlink" title="1.得到记录器"></a>1.得到记录器</h3><p>使用Log4j，第一步就是获取日志记录器，这个记录器将负责控制日志信息。其语法为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Logger <span class="title">getLogger</span><span class="params">(String name)</span></span>;</div></pre></td></tr></table></figure>
+<p>通过指定的名字获得记录器，如果必要的话，则为这个名字创建一个新的记录器。Name一般取本类的名字，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> Logger logger = Logger.getLogger ( ClassName.class.getName () ) ;</div></pre></td></tr></table></figure>
+<p><strong>注：推荐使用commons-logging结合log4j进行日志记录。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> Log logger = LogFactory.getLog(Yourclass.class);</div></pre></td></tr></table></figure>
+<h3 id="2-插入记录信息（格式化日志信息）"><a href="#2-插入记录信息（格式化日志信息）" class="headerlink" title="2.插入记录信息（格式化日志信息）"></a>2.插入记录信息（格式化日志信息）</h3><p>当上两个必要步骤执行完毕，您就可以轻松地使用不同优先级别的日志记录语句插入到您想记录日志的任何地方，其语法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Logger.debug ( Object message ) ; </div><div class="line">Logger.info ( Object message ) ; </div><div class="line">Logger.warn ( Object message ) ; </div><div class="line">Logger.error ( Object message ) ;</div></pre></td></tr></table></figure>
+<h2 id="Log4j配置范例"><a href="#Log4j配置范例" class="headerlink" title="Log4j配置范例"></a>Log4j配置范例</h2><p>LOG4J的配置之简单使它遍及于越来越多的应用中了：Log4J配置文件实现了输出到控制台、文件、回滚文件、发送日志邮件、输出到数据库日志表、自定义标签等全套功能。择其一二使用就够用了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">log4j.rootLogger=DEBUG,CONSOLE,file,ROLLING_FILE,SOCKET,MAIL,DATABASE,im</div><div class="line"></div><div class="line"># 应用于控制台</div><div class="line">log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender</div><div class="line">log4j.appender.Threshold=DEBUG</div><div class="line">log4j.appender.CONSOLE.Target=System.out</div><div class="line">log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.CONSOLE.layout.ConversionPattern=[framework] %d - %c -%-4r [%t] %-5p %c %x - %m%n</div><div class="line">#log4j.appender.CONSOLE.layout.ConversionPattern=[start]%d&#123;DATE&#125;[DATE]%n%p[PRIORITY]%n%x[NDC]%n%t[thread] n%c[CATEGORY]%n%m[MESSAGE]%n%n</div><div class="line"></div><div class="line"></div><div class="line">#应用于文件</div><div class="line">log4j.appender.file=org.apache.log4j.DailyRollingFileAppender</div><div class="line">log4j.appender.file.DatePattern=&apos;.&apos;yyyy-MM-dd</div><div class="line">log4j.appender.file.File=/logs/ecps.log</div><div class="line">log4j.appender.file.layout=org.apache.log4j.PatternLayout </div><div class="line">log4j.appender.file.layout.ConversionPattern=%-d&#123;yyyy-MM-dd HH:mm:ss&#125; %p [%c]: %m%n</div><div class="line"></div><div class="line"># 应用于文件回滚</div><div class="line">log4j.appender.ROLLING_FILE=org.apache.log4j.RollingFileAppender</div><div class="line">log4j.appender.ROLLING_FILE.Threshold=ERROR</div><div class="line">log4j.appender.ROLLING_FILE.File=rolling.log //文件位置,也可以用变量$&#123;java.home&#125;、rolling.log</div><div class="line">log4j.appender.ROLLING_FILE.Append=true //true:添加 false:覆盖</div><div class="line">log4j.appender.ROLLING_FILE.MaxFileSize=10KB //文件最大尺寸</div><div class="line">log4j.appender.ROLLING_FILE.MaxBackupIndex=1 //备份数</div><div class="line">log4j.appender.ROLLING_FILE.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.ROLLING_FILE.layout.ConversionPattern=[framework] %d - %c -%-4r [%t] %-5p %c %x - %m%n</div><div class="line"></div><div class="line">#应用于socket</div><div class="line">log4j.appender.SOCKET=org.apache.log4j.RollingFileAppender</div><div class="line">log4j.appender.SOCKET.RemoteHost=localhost</div><div class="line">log4j.appender.SOCKET.Port=5001</div><div class="line">log4j.appender.SOCKET.LocationInfo=true</div><div class="line"># Set up for Log Facter 5</div><div class="line">log4j.appender.SOCKET.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.SOCET.layout.ConversionPattern=[start]%d&#123;DATE&#125;[DATE]%n%p[PRIORITY]%n%x[NDC]%n%t[thread]%n%c[CATEGORY]%n%m[MESSAGE]%n%n</div><div class="line"></div><div class="line"># Log Factor 5 Appender</div><div class="line">log4j.appender.LF5_APPENDER=org.apache.log4j.lf5.LF5Appender</div><div class="line">log4j.appender.LF5_APPENDER.MaxNumberOfRecords=2000</div><div class="line"></div><div class="line"></div><div class="line"># 发送日志给邮件</div><div class="line"></div><div class="line">log4j.appender.MAIL=org.apache.log4j.net.SMTPAppender</div><div class="line">log4j.appender.MAIL.Threshold=ERROR</div><div class="line">log4j.appender.MAIL.BufferSize=10</div><div class="line">log4j.appender.MAIL.From=123@qq.com</div><div class="line">log4j.appender.MAIL.SMTPHost=smtp.qq.com</div><div class="line">log4j.appender.MAIL.SMTPUsername=123</div><div class="line">log4j.appender.MAIL.SMTPPassword=***</div><div class="line">log4j.appender.MAIL.SMTPDebug=false</div><div class="line">log4j.appender.MAIL.Subject=Log4JErrorMessage</div><div class="line">log4j.appender.MAIL.To=123@qq.com</div><div class="line">log4j.appender.MAIL.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.MAIL.layout.ConversionPattern=%-d&#123;yyyy-MM-dd HH:mm:ss&#125; [%t] %-5p %c %x -- %m%n</div><div class="line"></div><div class="line"></div><div class="line"># 用于数据库</div><div class="line">log4j.appender.DATABASE=org.apache.log4j.jdbc.JDBCAppender</div><div class="line">log4j.appender.DATABASE.URL=jdbc:mysql://localhost:3306/test</div><div class="line">log4j.appender.DATABASE.driver=com.mysql.jdbc.Driver</div><div class="line">log4j.appender.DATABASE.user=root</div><div class="line">log4j.appender.DATABASE.password=</div><div class="line">log4j.appender.DATABASE.sql=INSERT INTO LOG4J (Message) VALUES (’[framework] %d - %c -%-4r [%t] %-5p %c %x - %m%n’)</div><div class="line">log4j.appender.DATABASE.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.DATABASE.layout.ConversionPattern=[framework] %d - %c -%-4r [%t] %-5p %c %x - %m%n</div><div class="line"></div><div class="line">#自定义Appender</div><div class="line">log4j.appender.im = net.cybercorlin.util.logger.appender.IMAppender</div><div class="line">log4j.appender.im.host = mail.cybercorlin.net</div><div class="line">log4j.appender.im.username = username</div><div class="line">log4j.appender.im.password = password</div><div class="line">log4j.appender.im.recipient = corlin@cybercorlin.net</div><div class="line">log4j.appender.im.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.im.layout.ConversionPattern =[framework] %d - %c -%-4r [%t] %-5p %c %x - %m%n</div></pre></td></tr></table></figure>
+<h2 id="设置仅输出指定类的日志"><a href="#设置仅输出指定类的日志" class="headerlink" title="设置仅输出指定类的日志"></a>设置仅输出指定类的日志</h2><p>本人在使用HtmlUnit组件的时候，这个组件输出的各种日志刷屏得那叫一个酸爽。即便在使用它提供的一些API禁掉了一些日志输出，但还是会输出很多无用的日志信息。</p>
+<p>那么我们怎么能够限制只让指定的类才有资格输出日志呢？方法如下：</p>
+<ul>
+<li>首先你可以去掉log4j.rootLogger，使所有日志不在输出。</li>
+<li>然后再指定类输出。</li>
+</ul>
+<p>注：如果设置了日志输出log4j.rootLogger，并且后面设置了指定类输出，则对于指定类的输出配置会覆盖总的配置。举个栗子：总配置设置优先级为INFO，但是某个类具体设置为WARN，那么最后这个类输出优先级为WARN。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">#log4j.rootLogger=INFO, stdout, logfile</div><div class="line">log4j.logger.org.cyberneko.html.parsers=Fatal</div><div class="line">log4j.logger.org.apache.http=Fatal</div><div class="line"></div><div class="line">log4j.appender.stdout=org.apache.log4j.ConsoleAppender</div><div class="line">log4j.appender.stdout.Target=System.out</div><div class="line">log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.stdout.layout.ConversionPattern=%d&#123;ABSOLUTE&#125; %5p %c&#123;1&#125;:%L - %m%n</div><div class="line"></div><div class="line">log4j.appender.logfile=org.apache.log4j.DailyRollingFileAppender</div><div class="line">log4j.appender.logfile.File=./your.log</div><div class="line">log4j.appender.logfile.DatePattern='.'yyyy-MM-dd</div><div class="line">log4j.appender.logfile.Append=true</div><div class="line">log4j.appender.logfile.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.logfile.layout.ConversionPattern=%d [%t] %-5p %c %x -- %m%n</div><div class="line"></div><div class="line">#assign class out put log.</div><div class="line">log4j.logger.com.ltw.yourclass1=INFO,stdout,logfile</div><div class="line">log4j.logger.com.ltw.yourclass2=INFO,stdout,logfile</div></pre></td></tr></table></figure>
+<h2 id="使用Log4J监控系统日志邮件警报"><a href="#使用Log4J监控系统日志邮件警报" class="headerlink" title="使用Log4J监控系统日志邮件警报"></a>使用Log4J监控系统日志邮件警报</h2><p>在系统上线后，有时候遇到系统故障，这时候就可以登录服务器查看系统日志来排查问题。但是需要登录服务器，下载查找相关异常日志比较麻烦。而且没有监控的话，也无法实时了解到系统是否正常运行。那么有没有一种好办法将系统异常信息实时反馈给相关人员呢？</p>
+<p>下面讲的就是借助Log4J来记录程序运行日志，当一旦发现系统异常或者自己定义的其他一些情况发生时，及时通过邮件形式发送给相关负责人，并附上相关的系统日志信息，这样负责人就可以实时便捷的监控到系统的状态和相关异常信息。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>采用这种方式的优点有：</p>
+<ul>
+<li>实时性。不用定期或不定期的登陆系统查看是否正常运行。</li>
+<li>及时性。一旦系统异常，就会通知。</li>
+<li>便捷性。邮件里附上异常日志，不用登陆系统下载日志查看。</li>
+</ul>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>导入依赖jar包：</p>
+<p>1.log4j-1.2.17.jar</p>
+<p><a href="http://logging.apache.org/log4j/1.2/" target="_blank" rel="external">官网下载地址</a></p>
+<p>目前log4j最新版是1.2.17。低版本的log4j无法实现邮件发送功能，因为版本低于log4j-1.2.14.jar的不支持SMTP认证。</p>
+<p>发送邮件的一个重要的类是SMTPAppender，在1.2.8的版本中，SMTPAppender没有SMTPUsername和SMTPPassword属性。这两个属性分别是登录SMTP服务器发送认证的用户名和密码。</p>
+<p>2.mail-1.4.jar</p>
+<p>发送邮件当然需要用到JavaMail包啦。</p>
+<p>3.activation-1.1.jar</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>配置log4j.properties文件，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> 1 log4j.rootLogger=DEBUG, MAIL</div><div class="line"> 2 </div><div class="line"> 3 log4j.appender.MAIL=org.apache.log4j.net.SMTPAppender</div><div class="line"> 4 log4j.appender.MAIL.Threshold=ERROR</div><div class="line"> 5 log4j.appender.MAIL.BufferSize=10</div><div class="line"> 6 log4j.appender.MAIL.From=123@qq.com</div><div class="line"> 7 log4j.appender.MAIL.SMTPHost=smtp.qq.com</div><div class="line"> 8 log4j.appender.MAIL.SMTPUsername=123</div><div class="line"> 9 log4j.appender.MAIL.SMTPPassword=***</div><div class="line">10 log4j.appender.MAIL.SMTPDebug=false</div><div class="line">11 log4j.appender.MAIL.Subject=Log4JErrorMessage</div><div class="line">12 log4j.appender.MAIL.To=123@qq.com</div><div class="line">13 log4j.appender.MAIL.layout=org.apache.log4j.PatternLayout</div><div class="line">14 log4j.appender.MAIL.layout.ConversionPattern=%-d&#123;yyyy-MM-dd HH:mm:ss&#125; [%t] %-5p %c %x -- %m%n</div></pre></td></tr></table></figure>
+<p>每行配置详解：</p>
+<ul>
+<li>3.log4j的邮件发送appender，如果有必要你可以写自己的appender。</li>
+<li>4.发送邮件的门槛，仅当等于或高于ERROR级别时，邮件才被发送。</li>
+<li>5.缓存文件大小，日志达到10k时发送Email。</li>
+<li>6.发送邮件的邮箱帐号。</li>
+<li>7.SMTP邮件发送服务器地址。</li>
+<li>8.SMTP发送认证的帐号名。</li>
+<li>9.SMTP发送认证帐号的密码。</li>
+<li>10.是否打印调试信息，如果选true，则会输出和SMTP之间的握手等详细信息</li>
+<li>11.邮件主题。</li>
+<li>12.发送到什么邮箱，如果要发送给多个邮箱，则用逗号分隔。</li>
+</ul>
+<p>如果需要抄送给某人，则添加如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.appender.MAIL.Bcc=xxx@xxx.xxx</div></pre></td></tr></table></figure>
+<p>想让邮件内容日志以HTML格式来输出，则配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.appender.MAIL.layout=org.apache.log4j.HTMLLayout</div></pre></td></tr></table></figure>
+<p>输出到邮件中显示如下图：</p>
+<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/log4j/log4j_mail_output.png" alt=""></p>
+<hr>
+<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
+<p>原文链接：<a href="http://tianweili.github.io/blog/2015/03/03/log4j/" target="_blank" rel="external">http://tianweili.github.io/blog/2015/03/03/log4j/</a></p>
+<p>转载请注明作者和文章出处，谢谢。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Log4j是Apache的一个开放源代码项目，通过使用Log4j，我们可以控制日志信息输送的目的地是控制台、文件、GUI组件、甚至是套接口服务器、NT的事件记录器、UNIX Syslog守护进程等；我们也可以控制每一条日志的输出格式；通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="java" scheme="http://yoursite.com/categories/java/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>单例模式的八种写法比较</title>
@@ -1416,119 +1582,6 @@
     <summary type="html">
     
       骑车去西藏—第4天—泸定-康定，坚定的信心
-    
-    </summary>
-    
-      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>骑车去西藏—第3天—爬上了二郎山，我就是二郎神</title>
-    <link href="http://yoursite.com/2013/07/14/%E9%AA%91%E8%BD%A6%E5%8E%BB%E8%A5%BF%E8%97%8F%E2%80%94%E7%AC%AC3%E5%A4%A9%E2%80%94%E7%88%AC%E4%B8%8A%E4%BA%86%E4%BA%8C%E9%83%8E%E5%B1%B1%EF%BC%8C%E6%88%91%E5%B0%B1%E6%98%AF%E4%BA%8C%E9%83%8E%E7%A5%9E/"/>
-    <id>http://yoursite.com/2013/07/14/骑车去西藏—第3天—爬上了二郎山，我就是二郎神/</id>
-    <published>2013-07-14T10:07:34.000Z</published>
-    <updated>2016-12-06T02:32:42.000Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a>
-<p>原文链接：</p>
-<p><a href="http://tianweili.github.io/blog/2013/07/14/cycling-to-tibet-3/" target="_blank" rel="external">http://tianweili.github.io/blog/2013/07/14/cycling-to-tibet-3/</a></p>
-<h2 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h2><p>计划行程：两路乡（距新沟约20公里）—新沟—二郎山—泸定</p>
-<p>实际行程：两路乡（距新沟约20公里）—新沟—二郎山—泸定</p>
-<p>计划里程：70KM</p>
-<p>实际里程：70KM</p>
-<p>海拔：两路乡1330M—二郎山2170M—泸定1330M</p>
-<h2 id="从盆地进入高原"><a href="#从盆地进入高原" class="headerlink" title="从盆地进入高原"></a>从盆地进入高原</h2><p>由于今天要翻过出发以来遇到的第一座山，所以谁都不敢放松，严阵以待。收拾停当，早饭都没吃，身上揣着昨天买的几块冷馒头就上路了。清晨，路上没有汽车（其实这条国道本来通行的汽车就很少），骑友也没见到一个。骑了没半小时，肚子饿的不行，就在路边找了块远离飞石相对安全些的空地，掏出馒头一顿猛啃。由于馒头是昨天中午买的，又经过风吹雨淋的，已经是又冷又硬，但是饿了，还是吃的很香。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-79.jpg" alt=""></p>
-<h2 id="骇人的隧洞"><a href="#骇人的隧洞" class="headerlink" title="骇人的隧洞"></a>骇人的隧洞</h2><p>继续骑没多久就遇到了吓人的老虎嘴隧洞，里面竟然没有灯，从外面看，黑漆漆的隧洞还真像老虎嘴一样，仿佛要把人生吞了。牌子上显示限制汽车的时速竟然是5公里，可见洞内的危险。在外面稍作停当，装备上自行车手电筒（手电筒是淘宝上30块买的，很挫。好吧，后来我承认我后悔买这么差劲的了）。</p>
-<p>骑进了洞内才发现微弱的手电筒光简直是微不足道，整个人车立马被巨大的黑暗所吞噬。地面上坑坑洼洼的，全是巨大的一个挨着一个的坑，没有一点儿好路，有的坑能淹没大半个车轮。洞内渗水，泼泼洒洒的泉水从洞顶落下，洒在身上冰凉刺骨。由于我是平原来的，本来人就对高山隧洞什么的有一种天生的恐惧感，更何况这种糟糕的境况。整个人紧张兮兮的寻着路，绷着神经，此时最害怕的是对面会开来骑车。</p>
-<p>终于骑出来了，一两百米的隧洞但是却骑了好久好久。刚从黑暗出来看到阳光，眼睛很不适应，休整了下又继续出发了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-80.jpg" alt=""></p>
-<h2 id="塌方，又是塌方！"><a href="#塌方，又是塌方！" class="headerlink" title="塌方，又是塌方！"></a>塌方，又是塌方！</h2><p>骑了没多久路上就遇到了塌方，塌方这东西危险和耽误时间不说，还会造成堵车，绵延几公里。我到这地方时候，大家已经靠手清理了一个多小时石头，结果现场还是这个样子，看来要等很久了啊。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-81.jpg" alt=""></p>
-<p>警察来到这地方，看了下，就跑一边抽烟去了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-82.jpg" alt=""></p>
-<p>formes昨天遇到的塌方更严重，今天他再出发的时候，天全到新沟的路仍然没通，他在那滞留了6个小时，塌方才被清理到可以通路。下面是formes遇到塌方的情况，后来从他的口中才得知，当时塌方就在他面前发生了，很惊险。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-83.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-84.jpg" alt=""></p>
-<p>后来大家一起徒手搬了半小时石头，终于清理出来一条可以供人和自行车通过的小道，汽车就只有等待推土机过来清理了。继续往前骑的时候发现前面汽车因为塌方堵车好几公里，这时候就能体会到骑车去西藏的好处了，汽车什么的就只有原地等待加眼红的份了，哈哈。</p>
-<h2 id="坡坡坡，坡上还是坡"><a href="#坡坡坡，坡上还是坡" class="headerlink" title="坡坡坡，坡上还是坡"></a>坡坡坡，坡上还是坡</h2><p>因为今天要爬一座山，就意味着全程基本都是上坡。大家都是在很费力的蹬车，我开始用前1后2来骑了。到后面，基本上骑不了一公里，我就没力气了，就停下来休息一会儿。接着骑上车，发现即使是休息的再久，蹬不了几下，腿又没力气了！我想我的体力已经严重透支了，如果是在平时，我想我一定会停止运动，好好休息了。但是现在不行！今天的目标是翻过二郎山，抵达泸定。路上涂的白线和护栏上到处都是涂鸦，大部分都是抱怨爬坡的。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-85.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-86.jpg" alt=""></p>
-<p>看到面前绕来绕去的盘山公路，那么陡的上坡，让人感到崩溃。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-87.jpg" alt=""></p>
-<p>骑上一段，回头看着自己爬过的坡，一股自豪感就油然而生。 </p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-88.jpg" alt=""></p>
-<p>自己骑过的盘山公路</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-89.jpg" alt=""></p>
-<h2 id="毒辣的高原大太阳"><a href="#毒辣的高原大太阳" class="headerlink" title="毒辣的高原大太阳"></a>毒辣的高原大太阳</h2><p>挑战身体极限的可不止爬坡这么简单，适当的还要给你加点“佐料”，高原特有的太阳就是其中一味。今天真是个“好天气”，全天都是大晴天。骑到下午的时候发现码表上的温度计显示已经高达四十多度了！我不禁开始怀念起前几天还被我抱怨的阴雨天来。</p>
-<p>短袖我是不敢穿的，长袖长裤头巾把自己包了个密不透风，即便这样毒辣的太阳还是透过衣服拷的皮肤生疼，即使是包了头巾，后来我脸上还是晒的。formes比较狠，短袖上阵，不过后来晒得最惨的也是他，黑成什么样就不说了，脱掉了N层皮，贪图凉快也要付出代价啊。</p>
-<p>全副武装也使自己更热了，口渴的要死，不停的喝水，但是感觉喝完没两分钟，又都会变成汗液蒸发掉了。一天下来喝了那么多瓶水，但是只撒了一泡尿，后来宋说他一天都没撒尿。</p>
-<h2 id="搭车？不搭车！"><a href="#搭车？不搭车！" class="headerlink" title="搭车？不搭车！"></a>搭车？不搭车！</h2><p>由于显而易见的困难，从今天开始，我估计有二分之一的骑友开始搭车了。一路上不时能碰到小汽车从身后掠过，车顶上绑着一辆辆自行车，而很多人都会从车窗探出头来对你喊加油，并竖着大拇指。每当这时候，一股自豪感就会从从身体油然而生，浑身仿佛又有了一点力气继续往前骑。</p>
-<p>比较可气的是，每次汽车从你身旁经过的时候，司机都会停下来问你一句，搭车不？这是最考验人意志的时候了，前面是艰苦的看不到终点的挑战，一边是车里安逸的座位，很多人都是在这时候挺不住了。</p>
-<p>我还遇到过一个特别有耐心的司机，被我拒绝了很多次，仍然耐心的劝你去搭车。我想这不过是刚开始一个小小的二郎山，后面还会碰到那么多海拔四五千米的高山，而人生的高山又怎么能搭车而过？想到这，就更加坚定了我绝不搭车的决心！</p>
-<p>后来宋和我说，每次他看到坐在车里对他喊加油的骑友，他都会用带着鄙视的白眼看着他，哈哈。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-90.jpg" alt=""></p>
-<h2 id="你是海军陆战队的吗？"><a href="#你是海军陆战队的吗？" class="headerlink" title="你是海军陆战队的吗？"></a>你是海军陆战队的吗？</h2><p>一路上碰到不少人问我是不是海军陆战队的，哈哈，不就是穿了个迷彩裤嘛。每当这时候，戴着魔术头巾的脸下微微一笑，深藏功与名。</p>
-<h2 id="老乡见老乡"><a href="#老乡见老乡" class="headerlink" title="老乡见老乡"></a>老乡见老乡</h2><p>我在爬坡的时候，看到宋在前面休息，和几个骑友聊天。我过去的时候，宋一脸兴奋的跟我说你老乡过来了。介绍之后发现竟然是一个县的，还有这么巧合的事情，在异地他乡听着乡音感觉很亲切呐。后来我们一起爬上了二郎山，不过在下山的时候走散了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-91.jpg" alt=""></p>
-<h2 id="登上二郎山之巅"><a href="#登上二郎山之巅" class="headerlink" title="登上二郎山之巅"></a>登上二郎山之巅</h2><p>就在爬坡爬到崩溃，爬到山顶遥遥无期的时候，路边遇到一处人家，一问才知道到二郎山顶只有七八公里了，爬上山顶之后便是35公里的下坡，直达泸定！</p>
-<p>到二郎山的路上，很多人家都是养蜜蜂卖蜂蜜的，因为周围的野花比较多。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-92.jpg" alt=""></p>
-<p>后面到山顶的路，我和宋都没了骑的动力，基本上都是靠推了。和路上遇到的两个骑友（其中一个老乡）一起说着话，推着车，享受着即将到达山顶的激动喜悦之情。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-93.jpg" alt=""></p>
-<p>看这周围环境，有点要到山顶的意思了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-94.jpg" alt=""></p>
-<p>景色明显和山下和山腰大不一样了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-95.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-96.jpg" alt=""></p>
-<p>二郎山隧道，到了！哈哈。有几个骑友也到了，正在休息整顿。</p>
-<p>此时海拔两千多米，隧道全长4176米。隧道里很冷啊，码表温度计上显示才十几度，在半山腰上可是四十多度啊，这温差也太大了，赶忙把厚衣服装备起来。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-97.jpg" alt=""></p>
-<p>宋也到了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-98.jpg" alt=""></p>
-<p>骑过了隧道，几百米的下坡，再来个2公里的上坡，这是最可气的，本以为全都是下坡了，当看到还有上坡的时候那心情，唉，直接推上去。到了坡顶，此时便到达了本日最高点，海拔有2250米。</p>
-<p>接下来就是35公里的长下坡了，直接到达泸定。在山顶开始装备下山，头巾，头盔，骑行眼镜，面罩，护膝，外套神马的都装备上，360度无死角，因为即便是夏天，下山风大仍然会很冷。</p>
-<p>在山顶歇着的时候，碰到几个卖李子的，还给了我们几个李子吃。难道的闲暇时光，和他们吹牛聊天很开心。一个人看我要照相，硬要给我盆李子让我端着照，哈哈。 </p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-99.jpg" alt=""></p>
-<p>胜利了，笑的很开心很傻呵呵。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-100.jpg" alt=""></p>
-<p>下山途中会遇到两个观景台，日浴高原观景台和大渡河观景台，风景很好，高原地貌可以完全呈现出来了，还可以远眺大渡河。看到那么多的山被自己踩在脚下，嘿嘿，那感觉不摆了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-101.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-102.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-103.jpg" alt=""></p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-104.jpg" alt=""></p>
-<h2 id="35公里下山！"><a href="#35公里下山！" class="headerlink" title="35公里下山！"></a>35公里下山！</h2><p>下山的坡很陡，时速很容易就冲到40多，最高的时候我达到了49公里/小时，一泻千里，哈哈。想起自己上坡那样，不禁有“上坡如便秘，下坡如拉稀”的感觉。不过山路七绕八绕的，直路很少，老是遇到180度的大转弯，这时候为了安全考虑就得减速。 上视频。</p>
-<h2 id="抵达泸定！"><a href="#抵达泸定！" class="headerlink" title="抵达泸定！"></a>抵达泸定！</h2><p>大概四点钟到达泸定县城，先找了家旅店安顿下来再说，自然又是最便宜的那种，不过环境不错。接下来就是骑着车子晃晃悠悠的逛逛泸定县城。</p>
-<p>县城里到处都是志同道合的骑友啊，基本上在哪个旅馆前，车子一停就是一大排。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-105.jpg" alt=""></p>
-<p>先去找个餐馆填饱肚子再说，今天和宋奢侈了一回，点了两个炒菜，还吃了豆花饭，喝了点啤酒。不过，在吃饭的时候才发现，我的右手因为常捏刹车，可能已经受伤，已经无法正常活动了！连个筷子都拿不住，连菜都夹不了，做不了任何稍微精细一点的动作。</p>
-<p>看着眼馋的饭菜，只好这样握筷子了。宋每次一起去吃饭，都只点一个菜——番茄炒蛋，后来看着都腻了。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-106.jpg" alt=""></p>
-<h2 id="泸定桥"><a href="#泸定桥" class="headerlink" title="泸定桥"></a>泸定桥</h2><p>泸定就是因为当年红军飞夺泸定桥而闻名，来了泸定，不去看看泸定桥怎么能行呢。宋不想去，想回去休息，但还是被我拉去了。</p>
-<p>一路问到泸定桥，发现泸定桥早已不复当年的影子，铁索还是那个铁索，下面仍然是湍急的大河，但是铁索上已经搭上了木板，也开始收门票了。有的人拍照可笑的趴在木板上作出一副当年红军飞夺泸定桥的架势，试问如果没有了木板，你还敢踏上去么。顿时没了兴趣，照了张相片直接和宋打道回府。</p>
-<p><img src="http://7u2i08.com1.z0.glb.clouddn.com/cycling-to-tibet/cycling-to-tibet-107.jpg" alt=""></p>
-<p>回到住地的时候，还发生了个小插曲。我用钥匙开门的时候，不知用力太大还是怎么回事，轻轻一转，钥匙直接断在门锁里了！这下可急坏了我们，叫来房东，又是用镊子又是用撬棒的，轮流弄也搞不出来。后来我灵机一动，跟宋说既然弄不出来，干脆就拿镊子夹住断在里面的钥匙一转，把门开开就行了么，宋一试果然门开了。虚惊一场，还以为要被困在这儿了呢。不管怎么说，明天继续向前走吧。</p>
-<p>formes因为塌方今天到不了泸定，我们商定明天在康定见。</p>
-<h2 id="骑行日志"><a href="#骑行日志" class="headerlink" title="骑行日志"></a>骑行日志</h2><ul>
-<li><a href="http://tianweili.github.io/blog/2013/03/11/cycling-to-tibet-0/" target="_blank" rel="external">骑车去西藏—第0天—成都印象</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/12/cycling-to-tibet-1/" target="_blank" rel="external">骑车去西藏—第1天—出师不利</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/13/cycling-to-tibet-2/" target="_blank" rel="external">骑车去西藏—第2天—牛刀小试</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/14/cycling-to-tibet-3/" target="_blank" rel="external">骑车去西藏—第3天—爬上了二郎山，我就是二郎神</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/15/cycling-to-tibet-4/" target="_blank" rel="external">骑车去西藏—第4天—泸定-康定，坚定的信心</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/16/cycling-to-tibet-5/" target="_blank" rel="external">骑车去西藏—第5天—跑马溜溜的山上，情歌之城，康定</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/17/cycling-to-tibet-6/" target="_blank" rel="external">骑车去西藏—第6天—折多山，折磨人多的山</a></li>
-<li><a href="http://tianweili.github.io/blog/2013/07/18/cycling-to-tibet-7/" target="_blank" rel="external">骑车去西藏—第7天—高尔寺山，待续</a></li>
-</ul>
-<p>作者：<a href="http://tianweili.github.io/" target="_blank" rel="external">李天炜</a></p>
-<p>原文链接：<a href="http://tianweili.github.io/blog/2013/07/14/cycling-to-tibet-3/" target="_blank" rel="external">http://tianweili.github.io/blog/2013/07/14/cycling-to-tibet-3/</a></p>
-<p>转载请注明作者和文章出处，谢谢。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      骑车去西藏—第3天—爬上了二郎山，我就是二郎神
     
     </summary>
     
